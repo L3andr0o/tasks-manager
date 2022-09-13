@@ -8,6 +8,7 @@ export const GlobalStyles = createGlobalStyle`
         box-sizing: border-box;
         text-decoration: none;
         font-family: 'Plus Jakarta Sans';
+        list-style: none;
     }
     body{
         height: 100%;
