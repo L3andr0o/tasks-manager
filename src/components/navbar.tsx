@@ -15,7 +15,7 @@ export default function NavBar(){
                     <h1>kanban</h1>
                 </div>
                 <div className='burger-menu-toggle' onClick={burgerMenuHandler}>
-                    <h2>Plataform Launch</h2>
+                    <h2 className={burgerMenuState!} >Plataform Launch</h2>
                     <svg width='10' height='7' xmlns='http://www.w3.org/2000/svg' className={burgerMenuState!}>
                         <path stroke='#635FC7' strokeWidth='2' fill='none' d='m1 1 4 4 4-4'/>
                     </svg>
@@ -47,15 +47,25 @@ export default function NavBar(){
                         <span>+ Create New Board</span>
                     </div>
                 </div>
-                <div className='theme-changer'>
-                    <svg width="19" height="19" xmlns="http://www.w3.org/2000/svg"><path d="M9.167 15.833a.833.833 0 0 1 .833.834v.833a.833.833 0 0 1-1.667 0v-.833a.833.833 0 0 1 .834-.834ZM3.75 13.75a.833.833 0 0 1 .59 1.422l-1.25 1.25a.833.833 0 0 1-1.18-1.178l1.25-1.25a.833.833 0 0 1 .59-.244Zm10.833 0c.221 0 .433.088.59.244l1.25 1.25a.833.833 0 0 1-1.179 1.178l-1.25-1.25a.833.833 0 0 1 .59-1.422ZM9.167 5a4.167 4.167 0 1 1 0 8.334 4.167 4.167 0 0 1 0-8.334Zm-7.5 3.333a.833.833 0 0 1 0 1.667H.833a.833.833 0 1 1 0-1.667h.834Zm15.833 0a.833.833 0 0 1 0 1.667h-.833a.833.833 0 0 1 0-1.667h.833Zm-1.667-6.666a.833.833 0 0 1 .59 1.422l-1.25 1.25a.833.833 0 1 1-1.179-1.178l1.25-1.25a.833.833 0 0 1 .59-.244Zm-13.333 0c.221 0 .433.088.59.244l1.25 1.25a.833.833 0 0 1-1.18 1.178L1.91 3.09a.833.833 0 0 1 .59-1.422ZM9.167 0A.833.833 0 0 1 10 .833v.834a.833.833 0 1 1-1.667 0V.833A.833.833 0 0 1 9.167 0Z" fill="#828FA3"/></svg>
-                        <div className="toggle">
-                            <div></div>
-                        </div>
-                    <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg"><path d="M6.474.682c.434-.11.718.406.481.78A6.067 6.067 0 0 0 6.01 4.72c0 3.418 2.827 6.187 6.314 6.187.89.002 1.77-.182 2.584-.54.408-.18.894.165.724.57-1.16 2.775-3.944 4.73-7.194 4.73-4.292 0-7.771-3.41-7.771-7.615 0-3.541 2.466-6.518 5.807-7.37Zm8.433.07c.442-.294.969.232.674.674l-.525.787a1.943 1.943 0 0 0 0 2.157l.525.788c.295.441-.232.968-.674.673l-.787-.525a1.943 1.943 0 0 0-2.157 0l-.786.525c-.442.295-.97-.232-.675-.673l.525-.788a1.943 1.943 0 0 0 0-2.157l-.525-.787c-.295-.442.232-.968.674-.673l.787.525a1.943 1.943 0 0 0 2.157 0Z" fill="#828FA3"/></svg>
+                <div className='sidebar-bottom'>
+                    <div className='theme-changer'>
+                        <svg width="19" height="19" xmlns="http://www.w3.org/2000/svg"><path d="M9.167 15.833a.833.833 0 0 1 .833.834v.833a.833.833 0 0 1-1.667 0v-.833a.833.833 0 0 1 .834-.834ZM3.75 13.75a.833.833 0 0 1 .59 1.422l-1.25 1.25a.833.833 0 0 1-1.18-1.178l1.25-1.25a.833.833 0 0 1 .59-.244Zm10.833 0c.221 0 .433.088.59.244l1.25 1.25a.833.833 0 0 1-1.179 1.178l-1.25-1.25a.833.833 0 0 1 .59-1.422ZM9.167 5a4.167 4.167 0 1 1 0 8.334 4.167 4.167 0 0 1 0-8.334Zm-7.5 3.333a.833.833 0 0 1 0 1.667H.833a.833.833 0 1 1 0-1.667h.834Zm15.833 0a.833.833 0 0 1 0 1.667h-.833a.833.833 0 0 1 0-1.667h.833Zm-1.667-6.666a.833.833 0 0 1 .59 1.422l-1.25 1.25a.833.833 0 1 1-1.179-1.178l1.25-1.25a.833.833 0 0 1 .59-.244Zm-13.333 0c.221 0 .433.088.59.244l1.25 1.25a.833.833 0 0 1-1.18 1.178L1.91 3.09a.833.833 0 0 1 .59-1.422ZM9.167 0A.833.833 0 0 1 10 .833v.834a.833.833 0 1 1-1.667 0V.833A.833.833 0 0 1 9.167 0Z" fill="#828FA3"/></svg>
+                            <div className="toggle">
+                                <div></div>
+                            </div>
+                        <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg"><path d="M6.474.682c.434-.11.718.406.481.78A6.067 6.067 0 0 0 6.01 4.72c0 3.418 2.827 6.187 6.314 6.187.89.002 1.77-.182 2.584-.54.408-.18.894.165.724.57-1.16 2.775-3.944 4.73-7.194 4.73-4.292 0-7.771-3.41-7.771-7.615 0-3.541 2.466-6.518 5.807-7.37Zm8.433.07c.442-.294.969.232.674.674l-.525.787a1.943 1.943 0 0 0 0 2.157l.525.788c.295.441-.232.968-.674.673l-.787-.525a1.943 1.943 0 0 0-2.157 0l-.786.525c-.442.295-.97-.232-.675-.673l.525-.788a1.943 1.943 0 0 0 0-2.157l-.525-.787c-.295-.442.232-.968.674-.673l.787.525a1.943 1.943 0 0 0 2.157 0Z" fill="#828FA3"/></svg>
+                    </div>
+                    <div className="hidde-sidebar-btn" onClick={()=> setBurgerMenuState('hidden')}>
+                        <svg width="18" height="16" xmlns="http://www.w3.org/2000/svg"><path d="M8.522 11.223a4.252 4.252 0 0 1-3.654-5.22l3.654 5.22ZM9 12.25A8.685 8.685 0 0 1 1.5 8a8.612 8.612 0 0 1 2.76-2.864l-.86-1.23A10.112 10.112 0 0 0 .208 7.238a1.5 1.5 0 0 0 0 1.524A10.187 10.187 0 0 0 9 13.75c.414 0 .828-.025 1.239-.074l-1-1.43A8.88 8.88 0 0 1 9 12.25Zm8.792-3.488a10.14 10.14 0 0 1-4.486 4.046l1.504 2.148a.375.375 0 0 1-.092.523l-.648.453a.375.375 0 0 1-.523-.092L3.19 1.044A.375.375 0 0 1 3.282.52L3.93.068a.375.375 0 0 1 .523.092l1.735 2.479A10.308 10.308 0 0 1 9 2.25c3.746 0 7.031 2 8.792 4.988a1.5 1.5 0 0 1 0 1.524ZM16.5 8a8.674 8.674 0 0 0-6.755-4.219A1.75 1.75 0 1 0 12.75 5v-.001a4.25 4.25 0 0 1-1.154 5.366l.834 1.192A8.641 8.641 0 0 0 16.5 8Z" fill="#828FA3"/></svg>
+                        <span>Hide Sidebar</span>
+                    </div>
                 </div>
             </div>
             <div className={`bg ${burgerMenuState}`} onClick={burgerMenuHandler} ></div>
+
+            <div className={`show-sidebar-btn ${burgerMenuState}`}onClick={()=> setBurgerMenuState('visible')}>
+                <svg width="16" height="11" xmlns="http://www.w3.org/2000/svg"><path d="M15.815 4.434A9.055 9.055 0 0 0 8 0 9.055 9.055 0 0 0 .185 4.434a1.333 1.333 0 0 0 0 1.354A9.055 9.055 0 0 0 8 10.222c3.33 0 6.25-1.777 7.815-4.434a1.333 1.333 0 0 0 0-1.354ZM8 8.89A3.776 3.776 0 0 1 4.222 5.11 3.776 3.776 0 0 1 8 1.333a3.776 3.776 0 0 1 3.778 3.778A3.776 3.776 0 0 1 8 8.89Zm2.889-3.778a2.889 2.889 0 1 1-5.438-1.36 1.19 1.19 0 1 0 1.19-1.189H6.64a2.889 2.889 0 0 1 4.25 2.549Z" fill="#FFF"/></svg>
+            </div>
 
         </Wrapper>
     )
@@ -69,9 +79,44 @@ const Wrapper = styled.div`
     align-items: center;
     padding: 0 10px;
     justify-content: space-between;
+    .show-sidebar-btn{
+        display: none;
+    }
     @media (min-width: 768px) {
         height: 5em;
         padding: 0 15px;
+        .show-sidebar-btn{
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 92vh;
+        z-index: 200;
+        background-color: #635fc7;
+        width: 3em;
+        padding: 10px 0;
+        text-align: center;
+        border-radius: 0 20px 20px 0;
+        &.null{
+            display: none;
+        }
+        &.visible{
+            animation: hide .3s cubic-bezier(0.075, 0.82, 0.165, 1) 0s 1 normal forwards;
+            @keyframes hide {
+                100%{
+                    transform: translateX(-100%);
+                }
+            }
+        }
+        &.hidden{
+            animation: show .3s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0s 1 normal forwards;
+            transform: translateX(-100%);
+            @keyframes show {
+                100%{
+                    transform: translateX(0);
+                }
+            }
+        }
+    }
     }
    .left{
     display: flex;
@@ -96,11 +141,45 @@ const Wrapper = styled.div`
             color: #fff;
             @media (min-width: 768px) {
                 pointer-events: none;
-                margin-left: 100px;
+                /* margin-left: 100px; */
             }
             h2{
                 font-size: 16px;
                 margin-right: 10px;
+                position: relative;
+                @media (min-width: 768px) {
+                    margin-left: 80px;
+                    &::before{
+                    content: ' ';
+                    position: absolute;
+                    top: calc(-2em );
+                    left: -15px;
+                    width: 1px;
+                    height: 5em;
+                    background-color: #b3adad99;
+                    }
+                    /* &.null{
+                        margin-left: 80px;
+                    } */
+                    &.hidden{
+                        margin-left: 80px;
+                        animation: test .3s cubic-bezier(0.075, 0.82, 0.165, 1) 0s 1 normal forwards;
+                        @keyframes test {
+                           100%{
+                            margin-left: 35px;
+                           } 
+                        }
+                    }
+                    &.visible{
+                        margin-left: 35px;
+                        animation: translate .3s cubic-bezier(0.165, 0.84, 0.44, 1) .2s 1 normal forwards;
+                        @keyframes translate {
+                            100%{
+                                transform: translateX(40px);
+                            }
+                        }
+                    }
+                }
             }
             svg{
                 @media (min-width: 768px) {
@@ -152,18 +231,21 @@ const Wrapper = styled.div`
         }
    }
    .bg{
-        position: absolute;
-        width: 100vw;
-        height: 100vh;
-        left: 0;
-        top: 0;
-        background-color: #1212142f;
-        display: none;
-        &.visible{
-            display: block;
-        }
-        &.hidden{
+    display: none;
+        @media (max-width:768px) {
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            background-color: #1212142f;
             display: none;
+            &.visible{
+                display: block;
+            }
+            &.hidden{
+                display: none;
+            }
         }
     }
     .burger-menu{
@@ -188,6 +270,7 @@ const Wrapper = styled.div`
             align-items: center;
             justify-content: space-between;
             padding: 15px;
+            padding-bottom: 30px;
             .content{
                 margin-top: 100px;
                 width: 100%;
@@ -203,10 +286,28 @@ const Wrapper = styled.div`
             transform: scale(0);
             animation: visible .3s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0s 1 normal forwards;
             @keyframes visible {100%{transform: scale(1);}}
+            @media (min-width: 768px) {
+                display: flex;
+                transform: translateX(-100vw);
+                animation: visible .3s cubic-bezier(0.215, 0.610, 0.355, 1) 0s 1 normal forwards;
+                @keyframes visible {
+                    100%{
+                        transform: translateX(0);
+                    }
+                }
+            }
         }
         &.hidden{
             animation: hidden .3s cubic-bezier(0.165, 0.84, 0.44, 1) 0s 1 normal forwards;
             @keyframes hidden {100%{transform: scale(0);}}
+            @media (min-width: 768px) {
+                display: flex;
+                @keyframes hidden {
+                    100%{
+                        transform: translateX(-100%);
+                    }
+                }
+            }
         }
         h3{
             font-size: 12px;
@@ -241,7 +342,9 @@ const Wrapper = styled.div`
                 }
             }
         }
-        .theme-changer{
+        .sidebar-bottom{
+            width: 100%;
+            .theme-changer{
             width: 100%;
             background-color: #2b2c37;
             border-radius: 8px;
@@ -264,6 +367,20 @@ const Wrapper = styled.div`
                     width: 50%;
                     background-color: #fff;
                     border-radius: 50%;
+                }
+            }
+        }
+            .hidde-sidebar-btn{
+                display: none;
+                @media (min-width: 768px) {
+                    display: block;
+                    margin-top: 20px;
+                svg{
+                    margin-right: 10px;
+                }
+                span{
+                    color: #828FA3;
+                }
                 }
             }
         }
