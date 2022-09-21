@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { GlobalStyles } from '../assets/globalStyles/globalStyles';
+import AddNewTaskModal from '../components/addNewTaskModal';
 import EditBoardModal from '../components/editBoardModal';
 import NavBar from '../components/navbar';
 
 export default function Home(){
 
     const [editBoardModal, setEditBoardModal] = useState<boolean>(false);
+    const [addNewTaskModal, setAddNewTaskModal] = useState<boolean>(true)
 
 
     return(
@@ -21,6 +23,9 @@ export default function Home(){
                 </div>
                 {
                     (editBoardModal) && <EditBoardModal />
+                }
+                {
+                    (addNewTaskModal) && <AddNewTaskModal />
                 }
         </Wrapper>
     )
