@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useModals } from '../context/modalsContext';
 
 export default function NavBar(){
 
+    const {setAddNewTaskModal} = useModals();
     const [burgerMenuState, setBurgerMenuState] = useState<null | string>(null);
-
     const burgerMenuHandler = () => (burgerMenuState !== 'visible') ? setBurgerMenuState('visible') : setBurgerMenuState('hidden');
+
+
 
     return(
         <Wrapper>
@@ -23,7 +26,7 @@ export default function NavBar(){
             </div>
 
             <div className='right'>
-                <div className='add-btn'>
+                <div className='add-btn' onClick={()=> setAddNewTaskModal(true)}>
                     <svg width='12' height='12' xmlns='http://www.w3.org/2000/svg'><path fill='#FFF' d='M7.368 12V7.344H12V4.632H7.368V0H4.656v4.632H0v2.712h4.656V12z'/></svg>
                     <span>Add New Task</span>
                 </div>
@@ -258,6 +261,9 @@ const Wrapper = styled.div`
         border-radius: 5px;
         padding: 15px 20px;
         z-index: 200;
+        .content{
+            height: fit-content;
+        }
         @media (min-width: 768px) {
             top: 0;
             left: 0;
@@ -309,6 +315,7 @@ const Wrapper = styled.div`
                 }
             }
         }
+        
         h3{
             font-size: 12px;
             letter-spacing: 2px;

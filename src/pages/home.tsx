@@ -4,25 +4,36 @@ import { GlobalStyles } from '../assets/globalStyles/globalStyles';
 import AddNewTaskModal from '../components/addNewTaskModal';
 import EditBoardModal from '../components/editBoardModal';
 import NavBar from '../components/navbar';
+import { useModals } from '../context/modalsContext';
 
 export default function Home(){
 
-    const [editBoardModal, setEditBoardModal] = useState<boolean>(false);
-    const [addNewTaskModal, setAddNewTaskModal] = useState<boolean>(true)
+    const {editBoardModal, addNewTaskModal, setEditBoardModal} = useModals()
+    const [columns, setColumns] = useState<any>([]);
 
+    const addColumn = (e:any,name : string) =>{
+        e.preventDefault()
+        columns.push(name)
+        console.log(columns)
+    }
 
     return(
         <Wrapper>
             <GlobalStyles />
             <NavBar />
-                <div className="content">
-                    <div className="empty">
-                        <h1>This board is empty. Create a new column to get started.</h1>
-                        <button onClick={()=> setEditBoardModal(true)}>+ Add New Column</button>
-                    </div>
-                </div>
                 {
-                    (editBoardModal) && <EditBoardModal />
+                    (columns < 1) ?
+                    <div className="content">
+                        <div className="empty">
+                            <h1>This board is empty. Create a new column to get started.</h1>
+                            <button onClick={()=> setEditBoardModal(true)}>+ Add New Column</button>
+                        </div>
+                    </div>
+                    :
+                    <div>holaa</div>
+                }
+                {
+                    (editBoardModal) && <EditBoardModal fun={addColumn}/>
                 }
                 {
                     (addNewTaskModal) && <AddNewTaskModal />

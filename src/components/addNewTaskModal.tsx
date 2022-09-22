@@ -1,13 +1,17 @@
 import { useState } from "react"
 import styled from "styled-components"
+import { useModals } from "../context/modalsContext";
 
 export default function AddNewTaskModal(){
+
+    const {setAddNewTaskModal} = useModals();
+
 
     const [selectState, setSelectState] = useState<string | null>(null);
     const selectHandler =  ()=> (selectState === 'active') ? setSelectState('hidden') : setSelectState('active');
 
     return(
-        <Wrapper>
+        <Wrapper >
             <div className="modal">
                 <h1>Add New Task</h1>
                 <form>
@@ -42,6 +46,7 @@ export default function AddNewTaskModal(){
                     <button className="tasks-btn">Create Task</button>
                 </form>
             </div>
+            <div className="bg" onClick={()=> setAddNewTaskModal(false)}></div>
         </Wrapper>
     )
 }
@@ -56,7 +61,14 @@ const Wrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;    
+    flex-direction: column;  
+    .bg{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
     .modal{
         width: 90%;
         background-color: #2b2c37;

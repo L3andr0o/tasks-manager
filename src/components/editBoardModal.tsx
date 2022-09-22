@@ -1,6 +1,10 @@
 import styled from "styled-components"
+import { useModals } from "../context/modalsContext"
 
-export default function EditBoardModal(){
+export default function EditBoardModal(props : any){
+
+    const {setEditBoardModal} = useModals();
+
     return(
         <Wrapper>
             <div className="modal">
@@ -22,12 +26,13 @@ export default function EditBoardModal(){
                         <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg"><g fill="#828FA3" fillRule="evenodd"><path d="m12.728 0 2.122 2.122L2.122 14.85 0 12.728z"/><path d="M0 2.122 2.122 0 14.85 12.728l-2.122 2.122z"/></g></svg>
                     </div>
                     <div className="buttons">
-                        <button className="add-new-column">+ Add New Column</button>
+                        <button className="add-new-column" onClick={(e)=> props.fun(e,'gola')}>+ Add New Column</button>
                         <button className="save-changes">Save Changes</button>
                     </div>
                 </form>
 
             </div>
+            <div className="bg" onClick={()=> setEditBoardModal(false)}></div>
         </Wrapper>
     )
 }
@@ -44,6 +49,13 @@ const Wrapper = styled.div`
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    .bg{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
     .modal{
         width: 90%;
         background-color: #2b2c37;
