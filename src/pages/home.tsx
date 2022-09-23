@@ -11,18 +11,26 @@ export default function Home(){
     const {editBoardModal, addNewTaskModal, setEditBoardModal} = useModals()
     const [columns, setColumns] = useState<any>([]);
 
-    const addColumn = (e:any,name : string) =>{
-        e.preventDefault()
-        columns.push(name)
+    const addColumn = (e: any, name : any, id : any) =>{
+        e.preventDefault();
+        
+        columns.push({
+            'name' : name,
+            'id' : id
+        })
+        // setColumns(arr)
         console.log(columns)
     }
+
+
+
 
     return(
         <Wrapper>
             <GlobalStyles />
             <NavBar />
                 {
-                    (columns < 1) ?
+                    (columns.length < 1) ?
                     <div className="content">
                         <div className="empty">
                             <h1>This board is empty. Create a new column to get started.</h1>
@@ -30,7 +38,15 @@ export default function Home(){
                         </div>
                     </div>
                     :
-                    <div>holaa</div>
+                    <div className='columns'>
+                        <div className="test">
+                        {columns.map((column : any)=>(
+                                <div className='column' id={column.id} key={column.id}>
+                                    <h1>{column.name}</h1>
+                                </div>
+                        ))}
+                        </div>
+                    </div>
                 }
                 {
                     (editBoardModal) && <EditBoardModal fun={addColumn}/>
@@ -47,6 +63,33 @@ const Wrapper = styled.div`
     background-color: #20212c;
     min-height: 100vh;
     height: 100%;
+    overflow: hidden;
+    .columns{
+        max-width: 95vw;
+        width: fit-content;
+        height: 82vh;
+         overflow: scroll;
+        /* display: flex;
+        background-color: #2d3;  */
+        margin: 20px auto;
+        .test{
+            display: flex;
+            background-color: #6af;
+            overflow: scroll;
+            width: fit-content;
+            max-width: 1000vw;
+            height: 100%;
+            .column{
+            width: 15em;
+            height: 100%;
+            margin: 0 10px;
+            background-color: #000;
+            h1{
+                color: #f32;
+            }
+        }
+        }
+    }
     .content{
         height: 90vh;
         position: relative;

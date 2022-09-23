@@ -82,6 +82,7 @@ const Wrapper = styled.div`
     align-items: center;
     padding: 0 10px;
     justify-content: space-between;
+   
     .show-sidebar-btn{
         display: none;
     }

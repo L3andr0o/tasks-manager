@@ -9,6 +9,18 @@ export const GlobalStyles = createGlobalStyle`
         text-decoration: none;
         font-family: 'Plus Jakarta Sans';
         list-style: none;
+        
+        /* ::-webkit-scrollbar {
+        height: 10px;
+        width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+        background: #000;
+        }
+        ::-webkit-scrollbar-thumb {
+        background: #fff;
+        } */
+
     }
     body{
         height: 100%;

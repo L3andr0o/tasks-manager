@@ -1,5 +1,7 @@
 import styled from "styled-components"
 import { useModals } from "../context/modalsContext"
+import { v4 as uuidv4 } from 'uuid';
+
 
 export default function EditBoardModal(props : any){
 
@@ -10,24 +12,24 @@ export default function EditBoardModal(props : any){
             <div className="modal">
                 <h1>Edit Board</h1>
                 <label htmlFor="board-name">Board Name</label>
-                <input type="text" value='Plataform Launch' id="board-name" />
+                <input type="text" defaultValue='Plataform Launch' id="board-name" />
 
                 <form className="board-columns">
                     <span>Board Columns</span>
                     <div>
-                        <input type="text" value='Todo' />
+                        <input type="text" defaultValue='Todo' />
                         <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg"><g fill="#828FA3" fillRule="evenodd"><path d="m12.728 0 2.122 2.122L2.122 14.85 0 12.728z"/><path d="M0 2.122 2.122 0 14.85 12.728l-2.122 2.122z"/></g></svg>
                     </div>
                     <div>
-                        <input type="text" value='Doing' />
+                        <input type="text" defaultValue='Doing' />
                         <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg"><g fill="#828FA3" fillRule="evenodd"><path d="m12.728 0 2.122 2.122L2.122 14.85 0 12.728z"/><path d="M0 2.122 2.122 0 14.85 12.728l-2.122 2.122z"/></g></svg>
                     </div><div>
-                        <input type="text" value='Done' />
+                        <input type="text" defaultValue='Done' />
                         <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg"><g fill="#828FA3" fillRule="evenodd"><path d="m12.728 0 2.122 2.122L2.122 14.85 0 12.728z"/><path d="M0 2.122 2.122 0 14.85 12.728l-2.122 2.122z"/></g></svg>
                     </div>
                     <div className="buttons">
-                        <button className="add-new-column" onClick={(e)=> props.fun(e,'gola')}>+ Add New Column</button>
-                        <button className="save-changes">Save Changes</button>
+                        <button className="add-new-column">+ Add New Column</button>
+                        <button className="save-changes" onClick={(e)=> props.fun(e,'Todo', uuidv4())}>Save Changes</button>
                     </div>
                 </form>
 
