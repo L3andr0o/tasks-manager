@@ -28,6 +28,12 @@ export default function Home(){
         console.log(deita)
     }
 
+    const updateTask = async ( updated : string) =>{
+        const taskDoc = doc(db, 'db', 'GI1Eo1FX2gCI0QuBBdQD');
+        const taskUpdated = {test : updated};
+        await updateDoc(taskDoc, taskUpdated);
+        
+      }
     
 
     useEffect(()=>{
@@ -61,8 +67,8 @@ export default function Home(){
                     //      ))}
                     //      </div>
                     // /</div>
-                    <div>
-                        hola{deita[0].id}
+                    <div onClick={()=>updateTask('hola')}>
+                        hola{deita[0].data.sections[0].section1.columns[0].column1.taks[0].description}
                     </div>
                 }
                 {
