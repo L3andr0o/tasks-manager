@@ -29,7 +29,7 @@ export default function EditBoardModal(props : any){
                     </div>
                     <div className="buttons">
                         <button className="add-new-column">+ Add New Column</button>
-                        <button className="save-changes" onClick={(e)=> props.fun(e,'Todo', uuidv4())}>Save Changes</button>
+                        <button className="save-changes" >Save Changes</button>
                     </div>
                 </form>
 

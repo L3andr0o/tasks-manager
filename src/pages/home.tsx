@@ -1,55 +1,72 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { GlobalStyles } from '../assets/globalStyles/globalStyles';
 import AddNewTaskModal from '../components/addNewTaskModal';
 import EditBoardModal from '../components/editBoardModal';
 import NavBar from '../components/navbar';
 import { useModals } from '../context/modalsContext';
+import db from '../firebase';
+import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc} from 'firebase/firestore';
+import { data } from '../types/data';
 
 export default function Home(){
 
     const {editBoardModal, addNewTaskModal, setEditBoardModal} = useModals()
-    const [columns, setColumns] = useState<any>([]);
+    const usersCollectionRef = collection(db,'db');
+    const [columns, setColumns] = useState<any>([])
+    const [deita, setDeita] = useState<any>(null)
+    
 
-    const addColumn = (e: any, name : any, id : any) =>{
-        e.preventDefault();
-        
-        columns.push({
-            'name' : name,
-            'id' : id
-        })
-        // setColumns(arr)
-        console.log(columns)
+    const getData = async () =>{
+        const rawData = await getDocs(usersCollectionRef);
+        // const data = rawData.docs
+        const data : any = rawData.docs.map((doc)=>({...doc.data(), id : doc.id}));
+        // console.log(data[0].data.sections[0].section1.columns[0].column1.taks)
+        setColumns(data[0].data.sections[0].section1.columns);
+        // console.log(data[0].data.sections[0].section1.columns)
+        setDeita(data)
+        console.log(deita)
     }
 
+    
 
+    useEffect(()=>{
+        getData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
 
+    useEffect(()=>{
+        console.log(deita)
+    },[deita])
 
     return(
         <Wrapper>
             <GlobalStyles />
             <NavBar />
                 {
-                    (columns.length < 1) ?
+                    (!deita)?
                     <div className="content">
                         <div className="empty">
                             <h1>This board is empty. Create a new column to get started.</h1>
                             <button onClick={()=> setEditBoardModal(true)}>+ Add New Column</button>
                         </div>
                     </div>
-                    :
-                    <div className='columns'>
-                        <div className="test">
-                        {columns.map((column : any)=>(
-                                <div className='column' id={column.id} key={column.id}>
-                                    <h1>{column.name}</h1>
-                                </div>
-                        ))}
-                        </div>
+                     :
+                    //  <div className='columns'>
+                    //      <div className="test">
+                    //      {columns.map((column : any)=>(
+                    //              <div className='column' id={column.id} key={column.id}>
+                    //                  <h1>{column.name}</h1>
+                    //              </div>
+                    //      ))}
+                    //      </div>
+                    // /</div>
+                    <div>
+                        hola{deita[0].id}
                     </div>
                 }
                 {
-                    (editBoardModal) && <EditBoardModal fun={addColumn}/>
+                    (editBoardModal) && <EditBoardModal />
                 }
                 {
                     (addNewTaskModal) && <AddNewTaskModal />
