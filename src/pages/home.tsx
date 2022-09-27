@@ -4,46 +4,15 @@ import { GlobalStyles } from '../assets/globalStyles/globalStyles';
 import AddNewTaskModal from '../components/addNewTaskModal';
 import EditBoardModal from '../components/editBoardModal';
 import NavBar from '../components/navbar';
+import { useData } from '../context/dataContext';
 import { useModals } from '../context/modalsContext';
-import db from '../firebase';
-import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc} from 'firebase/firestore';
-import { data } from '../types/data';
+
 
 export default function Home(){
 
     const {editBoardModal, addNewTaskModal, setEditBoardModal} = useModals()
-    const usersCollectionRef = collection(db,'db');
-    const [columns, setColumns] = useState<any>([])
-    const [deita, setDeita] = useState<any>(null)
-    
+    const {deita, columns, tasks, boards, updateTask} = useData();
 
-    const getData = async () =>{
-        const rawData = await getDocs(usersCollectionRef);
-        // const data = rawData.docs
-        const data : any = rawData.docs.map((doc)=>({...doc.data(), id : doc.id}));
-        // console.log(data[0].data.sections[0].section1.columns[0].column1.taks)
-        setColumns(data[0].data.sections[0].section1.columns);
-        // console.log(data[0].data.sections[0].section1.columns)
-        setDeita(data)
-        console.log(deita)
-    }
-
-    const updateTask = async ( updated : string) =>{
-        const taskDoc = doc(db, 'db', 'GI1Eo1FX2gCI0QuBBdQD');
-        const taskUpdated = {test : updated};
-        await updateDoc(taskDoc, taskUpdated);
-        
-      }
-    
-
-    useEffect(()=>{
-        getData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
-
-    useEffect(()=>{
-        console.log(deita)
-    },[deita])
 
     return(
         <Wrapper>
@@ -58,17 +27,10 @@ export default function Home(){
                         </div>
                     </div>
                      :
-                    //  <div className='columns'>
-                    //      <div className="test">
-                    //      {columns.map((column : any)=>(
-                    //              <div className='column' id={column.id} key={column.id}>
-                    //                  <h1>{column.name}</h1>
-                    //              </div>
-                    //      ))}
-                    //      </div>
-                    // /</div>
-                    <div onClick={()=>updateTask('hola')}>
-                        hola{deita[0].data.sections[0].section1.columns[0].column1.taks[0].description}
+                    <div onClick={()=>updateTask({'name' : 'hola', 'board' : 'Launch Board '})}>
+                        {columns.map((column : any)=>(<h1 key={column.name}>{column.name}</h1>))}
+                        {boards.map((board: any)=>(<h1 key={board.name}>{board.name}</h1>))} 
+                        {tasks.map((task : any)=>(<h1 key={task.name}>{task.name}</h1>))}    
                     </div>
                 }
                 {
