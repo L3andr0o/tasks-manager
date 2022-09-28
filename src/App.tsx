@@ -8,15 +8,16 @@ import Home from './pages/home';
 function App() {
 
   return (
+    <BrowserRouter>
     <DataProvider>
       <ModalsProvider>
-      <BrowserRouter>
       <Routes>
         <Route path='/' element={<Home />} />
+        <Route path='/:board' element={<Home />} />
       </Routes>
-    </BrowserRouter>
     </ModalsProvider>
     </DataProvider>
+    </BrowserRouter>
   );
 }
 

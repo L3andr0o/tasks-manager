@@ -6,13 +6,14 @@ import EditBoardModal from '../components/editBoardModal';
 import NavBar from '../components/navbar';
 import { useData } from '../context/dataContext';
 import { useModals } from '../context/modalsContext';
+import { useParams } from 'react-router-dom';
 
 
 export default function Home(){
 
     const {editBoardModal, addNewTaskModal, setEditBoardModal} = useModals()
     const {deita, columns, tasks, boards, updateTask} = useData();
-
+    const {board} = useParams();
 
     return(
         <Wrapper>
