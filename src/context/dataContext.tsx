@@ -1,8 +1,10 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import db from '../firebase';
-import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc} from 'firebase/firestore';
+import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc, where, query} from 'firebase/firestore';
 import { data } from '../types/data';
 import { useNavigate } from 'react-router-dom';
+import { uuidv4 } from '@firebase/util';
+import { idText } from 'typescript';
 
 
 export const dataContext = createContext<any>(true);
@@ -13,40 +15,40 @@ export const useData = () =>{
 
 export default function DataProvider({children} : any){
 
-    const dataCollectionRef = collection(db,'data');
     const [columns, setColumns] = useState<any>([]);
     const [tasks, setTasks] = useState<any>([]);
     const [boards, setBoards] = useState<any>(null);
     const [deita, setDeita] = useState<any>(null)
     const navigate = useNavigate()
+    // const q = query(dataCollectionRef,where('Boards', '==', true))
  
 
-    const getData = async () =>{
-        const rawData = await getDocs(dataCollectionRef);
-        const data : any = rawData.docs.map((doc)=>({...doc.data()}));
-        data.map((d:any)=>(
-            setBoards(d.Boards)
-        ))
-        setDeita(data)
+    const getData = async (d : any) =>{
+      const rawData = await getDocs(d);
+      const data : any = rawData.docs.map((doc : any)=>({...doc.data(), id: doc.id}));
+			const boards : Array<any> = []
+			data.map((x : any)=>(
+				boards.push(x.board)
+			))
+			setBoards(boards)
     }
-    const updateTask = async ( updated : any) =>{
-        const taskDoc = doc(db, 'data','ubI9ffbebRJj7P7WaNb8');
-        let taskUpdated 
-        taskUpdated = {'columns' : [...columns,{'name' : 'Lennoon'}]}
-        await updateDoc(taskDoc, taskUpdated);
+    const createData = async () =>{
+      if(!localStorage.getItem('database')){
+					localStorage.setItem('database', 'leandro')
+          const dataCollectionRef = collection(db,'leandro');
+          await addDoc(dataCollectionRef,{board : 'plataform launch', date : Date()});
+          getData(dataCollectionRef);
+					return
       }
-    
+			const dataCollectionRef = collection(db,(localStorage.getItem('database')!));
+      getData(dataCollectionRef);
+    }
+
 
     useEffect(()=>{
-        getData()
+        createData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
-
-    useEffect(()=>{
-        const name = boards && boards[0].name.replace(' ', '_');
-        boards && navigate(`/${name}`)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[boards])
 
 
     return(
@@ -56,8 +58,8 @@ export default function DataProvider({children} : any){
             tasks,
             boards,
             deita,
-            getData,
-            updateTask
+            // getData,
+            // updateTask
         }
         }>
             {children}

@@ -28,10 +28,8 @@ export default function Home(){
                         </div>
                     </div>
                      :
-                    <div onClick={()=>updateTask({'name' : 'hola', 'board' : 'Launch Board '})}>
-                        {columns.map((column : any)=>(<h1 key={column.name}>{column.name}</h1>))}
-                        {boards.map((board: any)=>(<h1 key={board.name}>{board.name}</h1>))} 
-                        {tasks.map((task : any)=>(<h1 key={task.name}>{task.name}</h1>))}    
+                    <div>
+                        hola 
                     </div>
                 }
                 {
