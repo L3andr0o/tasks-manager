@@ -4,33 +4,38 @@ import { GlobalStyles } from '../assets/globalStyles/globalStyles';
 import AddNewTaskModal from '../components/addNewTaskModal';
 import EditBoardModal from '../components/editBoardModal';
 import NavBar from '../components/navbar';
-import { useData } from '../context/dataContext';
 import { useModals } from '../context/modalsContext';
-import { useParams } from 'react-router-dom';
+import { useAuth } from '../context/authContext';
 
 
 export default function Home(){
 
     const {editBoardModal, addNewTaskModal, setEditBoardModal} = useModals()
-    const {deita, columns, tasks, boards, updateTask} = useData();
-    const {board} = useParams();
+    const {user, logout} = useAuth();
+    console.log(user)
+    const handleLogout = async () =>{
+        try {
+            await logout();
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
 
     return(
         <Wrapper>
             <GlobalStyles />
             <NavBar />
                 {
-                    (!deita)?
+                    
                     <div className="content">
                         <div className="empty">
                             <h1>This board is empty. Create a new column to get started.</h1>
                             <button onClick={()=> setEditBoardModal(true)}>+ Add New Column</button>
+                            <button onClick={handleLogout}>Logout</button>
                         </div>
                     </div>
-                     :
-                    <div>
-                        hola 
-                    </div>
+  
                 }
                 {
                     (editBoardModal) && <EditBoardModal />
