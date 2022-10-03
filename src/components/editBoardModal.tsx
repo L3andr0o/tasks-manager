@@ -1,11 +1,67 @@
 import styled from "styled-components"
 import { useModals } from "../context/modalsContext"
 import { v4 as uuidv4 } from 'uuid';
+import { useData } from "../context/dataContext";
+import {useState, useEffect} from 'react';
 
 
 export default function EditBoardModal(props : any){
 
     const {setEditBoardModal} = useModals();
+    const {columns, setColumns} = useData();
+    const [autoFocus, setAutoFocus] = useState<boolean>(false)
+
+    const addNewColumn = (e:any,column:any)=>{
+        e.preventDefault()
+        const columnsAct = [];
+        columnsAct.push(...columns,column)
+        setColumns(columnsAct)
+        setAutoFocus(true)
+    };
+    const deleteColumn = (id:any)=>{
+        const columnsAct = columns.filter((column :any)=> column.id !== id)
+        setColumns(columnsAct)
+    }
+    const actColumnName = (e:any,id:any)=>{
+        const columnsAct = columns.map((column:any)=>{
+            if(column.id === id){
+                column.name = e.target.value
+            }
+            return column
+        });
+        setColumns(columnsAct)
+    }
+    const saveChanges = (e:any) =>{
+        e.preventDefault()
+        columns.forEach((column:any)=>{
+            if(column.name.length <= 0){
+                alert('name cant be empty')
+                return
+            }setEditBoardModal(false)
+            setAutoFocus(false)
+        })
+        
+    }
+
+    // useEffect(()=>{
+    //     if(columns.length === 0){
+    //         const defaultColumns = [];
+    //         defaultColumns.push({
+    //             name:'Todo',
+    //             id:uuidv4()
+    //         },
+    //         {
+    //             name:'Doing',
+    //             id:uuidv4()
+    //         },
+    //         {
+    //             name:'Done',
+    //             id:uuidv4()
+    //         })
+    //         setColumns(defaultColumns)
+    //     }
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // },[])
 
     return(
         <Wrapper>
@@ -16,20 +72,18 @@ export default function EditBoardModal(props : any){
 
                 <form className="board-columns">
                     <span>Board Columns</span>
-                    <div>
-                        <input type="text" defaultValue='Todo' />
-                        <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg"><g fill="#828FA3" fillRule="evenodd"><path d="m12.728 0 2.122 2.122L2.122 14.85 0 12.728z"/><path d="M0 2.122 2.122 0 14.85 12.728l-2.122 2.122z"/></g></svg>
-                    </div>
-                    <div>
-                        <input type="text" defaultValue='Doing' />
-                        <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg"><g fill="#828FA3" fillRule="evenodd"><path d="m12.728 0 2.122 2.122L2.122 14.85 0 12.728z"/><path d="M0 2.122 2.122 0 14.85 12.728l-2.122 2.122z"/></g></svg>
-                    </div><div>
-                        <input type="text" defaultValue='Done' />
-                        <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg"><g fill="#828FA3" fillRule="evenodd"><path d="m12.728 0 2.122 2.122L2.122 14.85 0 12.728z"/><path d="M0 2.122 2.122 0 14.85 12.728l-2.122 2.122z"/></g></svg>
-                    </div>
+                    {
+                        columns.map((column:any)=>(
+                        <div key={column.id}>
+                            <input type="text" defaultValue={column.name} onChange={(e)=>actColumnName(e,column.id)} autoFocus={autoFocus} />
+                            <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg" 
+                            onClick={()=>deleteColumn(column.id)}><g fill="#828FA3" fillRule="evenodd"><path d="m12.728 0 2.122 2.122L2.122 14.85 0 12.728z"/><path d="M0 2.122 2.122 0 14.85 12.728l-2.122 2.122z"/></g></svg>
+                        </div>
+                        ))
+                    }
                     <div className="buttons">
-                        <button className="add-new-column">+ Add New Column</button>
-                        <button className="save-changes" >Save Changes</button>
+                        <button className="add-new-column" onClick={(e)=>{addNewColumn(e,{name:'',id:uuidv4()})}}>+ Add New Column</button>
+                        <button className="save-changes" onClick={e=>saveChanges(e)}>Save Changes</button>
                     </div>
                 </form>
 
@@ -77,6 +131,11 @@ const Wrapper = styled.div`
             color: #fff;
             border-radius: 5px;
             padding: 10px;
+            outline: none;
+            transition: background-color .3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            &:focus{
+            background-color: #000;
+            }
         }
         h1{
             font-size: 18px;

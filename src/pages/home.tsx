@@ -20,8 +20,7 @@ export default function Home(){
             console.log(e)
         }
     }
-
-
+    
     return(
         <Wrapper>
             <GlobalStyles />
