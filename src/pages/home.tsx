@@ -6,12 +6,14 @@ import EditBoardModal from '../components/editBoardModal';
 import NavBar from '../components/navbar';
 import { useModals } from '../context/modalsContext';
 import { useAuth } from '../context/authContext';
+import { useData } from '../context/dataContext';
 
 
 export default function Home(){
 
     const {editBoardModal, addNewTaskModal, setEditBoardModal} = useModals()
     const {user, logout} = useAuth();
+    const {columns} = useData();
     console.log(user)
     const handleLogout = async () =>{
         try {
@@ -26,7 +28,8 @@ export default function Home(){
             <GlobalStyles />
             <NavBar />
                 {
-                    
+                    columns.length === 0
+                    ?
                     <div className="content">
                         <div className="empty">
                             <h1>This board is empty. Create a new column to get started.</h1>
@@ -34,7 +37,17 @@ export default function Home(){
                             <button onClick={handleLogout}>Logout</button>
                         </div>
                     </div>
-  
+                    :
+                    <div className='columns'>
+                        <div className="test">
+                        {columns.map((column:any)=>(
+                            <div className="column" key={column.id}>
+                                <h1>{column.name}</h1>
+                            </div>
+                        ))} 
+                        </div>
+                    </div>
+                        
                 }
                 {
                     (editBoardModal) && <EditBoardModal />

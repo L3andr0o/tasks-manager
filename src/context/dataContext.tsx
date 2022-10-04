@@ -18,7 +18,7 @@ export default function DataProvider({children} : any){
     const [boards, setBoards] = useState<any>(['Plataform Launch']);
     const [columns, setColumns] = useState<any>([]);
     const [tasks, setTasks] = useState<any>([])
-
+    
 
     return(
         <dataContext.Provider 

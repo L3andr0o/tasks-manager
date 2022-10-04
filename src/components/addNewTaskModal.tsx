@@ -1,10 +1,12 @@
 import { useState } from "react"
 import styled from "styled-components"
+import { useData } from "../context/dataContext";
 import { useModals } from "../context/modalsContext";
 
 export default function AddNewTaskModal(){
 
     const {setAddNewTaskModal} = useModals();
+    const {columns} = useData();
 
 
     const [selectState, setSelectState] = useState<string | null>(null);
@@ -38,9 +40,9 @@ export default function AddNewTaskModal(){
                             <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg"><path stroke="#635FC7" strokeWidth="2" fill="none" d="m1 1 4 4 4-4"/></svg>
                         </div>
                         <ul className={selectState!}>
-                            <li>Todo</li>
-                            <li>Doing</li>
-                            <li>Done</li>
+                            {columns.map((column:any)=>(
+                                <li key={column.id}>{column.name}</li>
+                            ))}
                         </ul>
                     </div>
                     <button className="tasks-btn">Create Task</button>

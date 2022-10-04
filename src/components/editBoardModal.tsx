@@ -134,7 +134,7 @@ const Wrapper = styled.div`
             outline: none;
             transition: background-color .3s cubic-bezier(0.165, 0.84, 0.44, 1);
             &:focus{
-            background-color: #000;
+            background-color: #757575;
             }
         }
         h1{
@@ -147,6 +147,7 @@ const Wrapper = styled.div`
             font-size: 12px;
             font-weight: 600;
             margin-bottom: 5px;
+            
         }
         #board-name{
             width: 100%;
