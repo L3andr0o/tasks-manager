@@ -8,72 +8,70 @@ import {useState, useEffect} from 'react';
 export default function EditBoardModal(props : any){
 
     const {setEditBoardModal} = useModals();
-    const {columns, setColumns} = useData();
+    const {columns, setColumns,boards,setBoards,selectedBoard} = useData();
+    const [modalColumns,setModalColumns] = useState<any>([]);
     const [autoFocus, setAutoFocus] = useState<boolean>(false)
 
     const addNewColumn = (e:any,column:any)=>{
         e.preventDefault()
         const columnsAct = [];
-        columnsAct.push(...columns,column)
-        setColumns(columnsAct)
+        columnsAct.push(...modalColumns,column)
+        setModalColumns(columnsAct)
         setAutoFocus(true)
     };
     const deleteColumn = (id:any)=>{
         const columnsAct = columns.filter((column :any)=> column.id !== id)
-        setColumns(columnsAct)
+        setModalColumns(columnsAct)
     }
     const actColumnName = (e:any,id:any)=>{
-        const columnsAct = columns.map((column:any)=>{
+        const columnsAct = modalColumns.map((column:any)=>{
             if(column.id === id){
                 column.name = e.target.value
             }
             return column
         });
-        setColumns(columnsAct)
+        setModalColumns(columnsAct)
+    }
+    const actBoardName = (e:any,id:any)=>{
+        const boardsAct = boards.map((board:any)=>{
+            if(board.id === id){
+                board.name = e.target.value
+            }
+            return board
+        });
+        setBoards(boardsAct)
+        console.log(boards)
     }
     const saveChanges = (e:any) =>{
         e.preventDefault()
-        columns.forEach((column:any)=>{
+        modalColumns.forEach((column:any)=>{
             if(column.name.length <= 0){
                 alert('name cant be empty')
                 return
             }setEditBoardModal(false)
+            setColumns(modalColumns)
             setAutoFocus(false)
         })
         
     }
+    useEffect(()=>{
+        setModalColumns(columns)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
 
-    // useEffect(()=>{
-    //     if(columns.length === 0){
-    //         const defaultColumns = [];
-    //         defaultColumns.push({
-    //             name:'Todo',
-    //             id:uuidv4()
-    //         },
-    //         {
-    //             name:'Doing',
-    //             id:uuidv4()
-    //         },
-    //         {
-    //             name:'Done',
-    //             id:uuidv4()
-    //         })
-    //         setColumns(defaultColumns)
-    //     }
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // },[])
 
     return(
         <Wrapper>
             <div className="modal">
                 <h1>Edit Board</h1>
                 <label htmlFor="board-name">Board Name</label>
-                <input type="text" defaultValue='Plataform Launch' id="board-name" />
-
+                {
+                <input type="text" defaultValue={selectedBoard.name} id="board-name" onChange={e=>actBoardName(e,selectedBoard.id)} />
+                }
                 <form className="board-columns">
                     <span>Board Columns</span>
                     {
-                        columns.map((column:any)=>(
+                        modalColumns.map((column:any)=>(
                         <div key={column.id}>
                             <input type="text" defaultValue={column.name} onChange={(e)=>actColumnName(e,column.id)} autoFocus={autoFocus} />
                             <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg" 

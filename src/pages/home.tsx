@@ -13,7 +13,7 @@ export default function Home(){
 
     const {editBoardModal, addNewTaskModal, setEditBoardModal} = useModals()
     const {user, logout} = useAuth();
-    const {columns} = useData();
+    const {columns,tasks} = useData();
     console.log(user)
     const handleLogout = async () =>{
         try {
@@ -43,6 +43,23 @@ export default function Home(){
                         {columns.map((column:any)=>(
                             <div className="column" key={column.id}>
                                 <h1>{column.name}</h1>
+                                {
+                                    // eslint-disable-next-line array-callback-return
+                                    tasks.map((task:any)=>{
+                                        if(task.column === column.name){
+                                          return( 
+                                             <div>
+                                                <h1>{task.title}</h1>
+                                                <p>{task.description}</p>
+                                                {task.subtasks.map((subtask:any)=>(
+                                                    <div>
+                                                        <span>{subtask.content}</span>
+                                                    </div>
+                                                ))}   
+                                            </div>)
+                                        }
+                                    })
+                                }
                             </div>
                         ))} 
                         </div>

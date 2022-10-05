@@ -1,3 +1,4 @@
+import { uuidv4 } from "@firebase/util";
 import { useState } from "react"
 import styled from "styled-components"
 import { useData } from "../context/dataContext";
@@ -6,11 +7,46 @@ import { useModals } from "../context/modalsContext";
 export default function AddNewTaskModal(){
 
     const {setAddNewTaskModal} = useModals();
-    const {columns} = useData();
+    const {columns,tasks,setTasks} = useData();
+
+    const [selectedColumn, setSelectedColumn] = useState<any>(columns[0].name);
+    const [subtasks, setSubtasks] = useState<any>([
+        {content:'',
+        id:uuidv4(),
+        placeholder:'e.g. Take coffee break'},
+        {content:'',
+        id:uuidv4(),
+        placeholder:'e.g. Drink coffee & smile'
+        }]);
+    const [newTask, setNewTask] = useState({title:'',description:''})
+    const handleChange = ({target : {name, value}}:any) =>setNewTask({...newTask, [name]: value});
 
 
+    const addNewSubtask = (e:any,subtask:any)=>{
+        e.preventDefault();
+        const subtasksAct = [];
+        subtasksAct.push(...subtasks,subtask);
+        setSubtasks(subtasksAct);
+    }
+    const deleteSubtask = (id:any)=>{
+        const subtasksAct = subtasks.filter((subtask:any)=>subtask.id !== id);
+        setSubtasks(subtasksAct)
+    }
     const [selectState, setSelectState] = useState<string | null>(null);
     const selectHandler =  ()=> (selectState === 'active') ? setSelectState('hidden') : setSelectState('active');
+    const createTask = (e:any)=>{
+        e.preventDefault()
+        const task : any= {
+            id:uuidv4(),
+            title:newTask.title,
+            description:newTask.description,
+            subtasks: subtasks,
+            column:selectedColumn,
+        }
+        setTasks([...tasks,task]);
+        console.log(tasks)
+    }
+
 
     return(
         <Wrapper >
@@ -18,34 +54,37 @@ export default function AddNewTaskModal(){
                 <h1>Add New Task</h1>
                 <form>
                     <label htmlFor="task">Title</label>
-                    <input type="text" placeholder="e.g. Take coffee break" id="title" name="title"/>
+                    <input type="text" placeholder="e.g. Take coffee break" id="title" name="title" onChange={handleChange}/>
                     <label htmlFor="description">Description</label>
-                    <input type="text" placeholder="e.g. It’s always good to take a break. This 15 minute break will  recharge the batteries a little." id="description" name="description" />
+                    <input type="text" placeholder="e.g. It’s always good to take a break. This 15 minute break will  recharge the batteries a little." id="description" name="description" onChange={handleChange} />
                     <div className="subtasks">
                         <span>Subtasks</span>
-                        <div>
-                            <input type="text" placeholder="e.g. Make a coffee" />
-                            <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg"><g fill="#828FA3" fillRule="evenodd"><path d="m12.728 0 2.122 2.122L2.122 14.85 0 12.728z"/><path d="M0 2.122 2.122 0 14.85 12.728l-2.122 2.122z"/></g></svg>
-                        </div>
-                        <div>
-                            <input type="text" placeholder="e.g. Drink coffe & Smile" />
-                            <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg"><g fill="#828FA3" fillRule="evenodd"><path d="m12.728 0 2.122 2.122L2.122 14.85 0 12.728z"/><path d="M0 2.122 2.122 0 14.85 12.728l-2.122 2.122z"/></g></svg>
-                        </div>
-                        <button className="subtasks-btn">+ Add New Subtask</button>
+                        {
+                            subtasks.map((subtask:any)=>(
+                                <div key={subtask.id}>
+                                    <input type="text" placeholder={subtask.placeholder!}  />
+                                    <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg" onClick={()=>deleteSubtask(subtask.id)}><g fill="#828FA3" fillRule="evenodd"><path d="m12.728 0 2.122 2.122L2.122 14.85 0 12.728z"/><path d="M0 2.122 2.122 0 14.85 12.728l-2.122 2.122z"/></g></svg>
+                                </div>
+                            ))
+                        }
+                        <button className="subtasks-btn" 
+                        onClick={e=>addNewSubtask(e,{content:'',id:uuidv4(),placeholder:null})}>
+                            + Add New Subtask
+                        </button>
                     </div>
                     <div className='select'>
                         <span>Status</span>
                         <div className='selected-option' onClick={selectHandler}>
-                            <span>Todo</span>
+                            <span>{selectedColumn}</span>
                             <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg"><path stroke="#635FC7" strokeWidth="2" fill="none" d="m1 1 4 4 4-4"/></svg>
                         </div>
                         <ul className={selectState!}>
                             {columns.map((column:any)=>(
-                                <li key={column.id}>{column.name}</li>
+                                <li key={column.id} onClick={()=>setSelectedColumn(column.name)}>{column.name}</li>
                             ))}
                         </ul>
                     </div>
-                    <button className="tasks-btn">Create Task</button>
+                    <button className="tasks-btn" onClick={e=>createTask(e)}>Create Task</button>
                 </form>
             </div>
             <div className="bg" onClick={()=> setAddNewTaskModal(false)}></div>

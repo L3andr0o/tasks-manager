@@ -1,4 +1,4 @@
-import { createContext, useContext, useState} from 'react';
+import { createContext, useContext, useEffect, useState} from 'react';
 // import db from '../firebase';
 // import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc, where, query} from 'firebase/firestore';
 // import { data } from '../types/data';
@@ -15,9 +15,14 @@ export const useData = () =>{
 
 export default function DataProvider({children} : any){
 
-    const [boards, setBoards] = useState<any>(['Plataform Launch']);
+    const [boards, setBoards] = useState<any>([{name:'Plataform Launch',id:uuidv4()}]);
     const [columns, setColumns] = useState<any>([]);
     const [tasks, setTasks] = useState<any>([])
+    const [selectedBoard, setSelectedBoard] = useState<any>();
+    useEffect(()=>{
+        setSelectedBoard(boards[0])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
     
 
     return(
@@ -28,7 +33,9 @@ export default function DataProvider({children} : any){
             columns,
             setColumns,
             tasks,
-            setTasks
+            setTasks,
+            selectedBoard,
+            setSelectedBoard
         }
         }>
             {children}
