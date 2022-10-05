@@ -32,6 +32,15 @@ export default function AddNewTaskModal(){
         const subtasksAct = subtasks.filter((subtask:any)=>subtask.id !== id);
         setSubtasks(subtasksAct)
     }
+    const actSubtask = (e:any,id:any)=>{
+        const subtasksAct = subtasks.map((subtask:any)=>{
+            if(subtask.id === id){
+                subtask.content = e.target.value;
+            }
+            return subtask
+        })
+        setSubtasks(subtasksAct)
+    }
     const [selectState, setSelectState] = useState<string | null>(null);
     const selectHandler =  ()=> (selectState === 'active') ? setSelectState('hidden') : setSelectState('active');
     const createTask = (e:any)=>{
@@ -62,13 +71,13 @@ export default function AddNewTaskModal(){
                         {
                             subtasks.map((subtask:any)=>(
                                 <div key={subtask.id}>
-                                    <input type="text" placeholder={subtask.placeholder!}  />
+                                    <input type="text" placeholder={subtask.placeholder!} onChange={e=>actSubtask(e,subtask.id)} />
                                     <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg" onClick={()=>deleteSubtask(subtask.id)}><g fill="#828FA3" fillRule="evenodd"><path d="m12.728 0 2.122 2.122L2.122 14.85 0 12.728z"/><path d="M0 2.122 2.122 0 14.85 12.728l-2.122 2.122z"/></g></svg>
                                 </div>
                             ))
                         }
                         <button className="subtasks-btn" 
-                        onClick={e=>addNewSubtask(e,{content:'',id:uuidv4(),placeholder:null})}>
+                        onClick={e=>addNewSubtask(e,{content:'',id:uuidv4(),placeholder:null,completed:false})}>
                             + Add New Subtask
                         </button>
                     </div>

@@ -39,23 +39,25 @@ export default function Home(){
                     </div>
                     :
                     <div className='columns'>
-                        <div className="test">
+                        <div className="container">
                         {columns.map((column:any)=>(
                             <div className="column" key={column.id}>
-                                <h1>{column.name}</h1>
+                                <h1>
+                                    {column.name}  
+                                    <span> 
+                                        ( {tasks.filter((task:any)=>task.column === column.name).length} )
+                                    </span>
+                                </h1>
                                 {
                                     // eslint-disable-next-line array-callback-return
                                     tasks.map((task:any)=>{
                                         if(task.column === column.name){
                                           return( 
-                                             <div>
+                                             <div key={task.id} className='task'>
                                                 <h1>{task.title}</h1>
-                                                <p>{task.description}</p>
-                                                {task.subtasks.map((subtask:any)=>(
-                                                    <div>
-                                                        <span>{subtask.content}</span>
-                                                    </div>
-                                                ))}   
+                                                <h2>{
+                                                task.subtasks.filter((subtask:any)=>subtask.completed === false).length} of {task.subtasks.length} subtasks
+                                                </h2>
                                             </div>)
                                         }
                                     })
@@ -83,27 +85,48 @@ const Wrapper = styled.div`
     height: 100%;
     overflow: hidden;
     .columns{
-        max-width: 95vw;
+        max-width: 98vw;
         width: fit-content;
         height: 82vh;
          overflow: scroll;
         /* display: flex;
         background-color: #2d3;  */
         margin: 20px auto;
-        .test{
+        .container{
             display: flex;
-            background-color: #6af;
             overflow: scroll;
             width: fit-content;
             max-width: 1000vw;
             height: 100%;
             .column{
-            width: 15em;
+            width: 18em;
             height: 100%;
             margin: 0 10px;
-            background-color: #000;
+            /* background-color: #000; */
             h1{
-                color: #f32;
+                color: #ccc;
+                text-transform: uppercase;
+                font-size: 14px;
+                font-weight: 300;
+                
+            }
+            .task{
+                width: 100%;
+                background-color: #2b2c37;
+                border-radius: 5px;
+                padding: 20px 15px;
+                margin-top: 20px;
+                h1{
+                    color: #fff;
+                    font-weight: 600;
+                    text-transform: none;
+                }
+                h2{
+                    color:#ccc;
+                    font-size: 12px;
+                    font-weight: 200;
+                    margin-top: 10px;
+                }
             }
         }
         }
