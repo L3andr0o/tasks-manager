@@ -7,13 +7,20 @@ import NavBar from '../components/navbar';
 import { useModals } from '../context/modalsContext';
 import { useAuth } from '../context/authContext';
 import { useData } from '../context/dataContext';
+import IndvTask from '../components/indvTask';
 
 
 export default function Home(){
 
-    const {editBoardModal, addNewTaskModal, setEditBoardModal} = useModals()
+    const {editBoardModal, addNewTaskModal, setEditBoardModal,taskState, setTaskState, setSelectedTask} = useModals()
     const {user, logout} = useAuth();
     const {columns,tasks} = useData();
+    
+    const showTask = (task:any) =>{
+        setTaskState(true);
+        setSelectedTask(task)
+    }
+
     console.log(user)
     const handleLogout = async () =>{
         try {
@@ -53,7 +60,7 @@ export default function Home(){
                                     tasks.map((task:any)=>{
                                         if(task.column === column.name){
                                           return( 
-                                             <div key={task.id} className='task'>
+                                             <div key={task.id} className='task' onClick={()=>showTask(task)}>
                                                 <h1>{task.title}</h1>
                                                 <h2>{
                                                 task.subtasks.filter((subtask:any)=>subtask.completed === false).length} of {task.subtasks.length} subtasks
@@ -68,12 +75,9 @@ export default function Home(){
                     </div>
                         
                 }
-                {
-                    (editBoardModal) && <EditBoardModal />
-                }
-                {
-                    (addNewTaskModal) && <AddNewTaskModal />
-                }
+                { editBoardModal && <EditBoardModal />}
+                {addNewTaskModal && <AddNewTaskModal />}
+                {taskState && <IndvTask />}
         </Wrapper>
     )
 }
