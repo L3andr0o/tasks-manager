@@ -20,6 +20,11 @@ function App() {
               <Home />
             </ProtectedRoute>
           }/>
+          <Route path='/:id' element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }/>
           <Route path='/login' element={<Login />} />
         </Routes>
       </ModalsProvider>

@@ -2,19 +2,37 @@ import styled from "styled-components"
 import {useState,useEffect} from 'react';
 import { useData } from "../context/dataContext";
 import { useModals } from "../context/modalsContext";
+import { useParams } from "react-router-dom";
+import { createImportSpecifier } from "typescript";
 
 export default function IndvTask(){
 
-    const {columns} = useData();
-    const {taskState,setTaskState, selectedTask} = useModals()
+    const id = useParams();
+    const {columns,tasks,setTasks} = useData();
+    const {setTaskState, selectedTask, setSelectedTask} = useModals()
     const [selectedColumn, setSelectedColumn] = useState<any>();
     const [selectState, setSelectState] = useState<string | null>(null);
-    const selectHandler =  ()=> (selectState === 'active') ? setSelectState('hidden') : setSelectState('active');
     
+    const selectHandler =  ()=> (selectState === 'active') ? setSelectState('hidden') : setSelectState('active');
+    const actSubtaskState = (e:any,subtask : any) =>{
+        subtask.completed = e.target.checked
+        console.log(tasks)
+        }
+ 
+    const taskx = () =>{
+        const xd = tasks.filter((task:any)=> task.id === id.id);
+        setSelectedTask(xd[0])
+    }
+
     useEffect(()=>{
         columns.length > 0 && setSelectedColumn(columns[0].name)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
+    useEffect(()=>{
+        taskx()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
+
 
     return(
         <Wrapper>
@@ -29,19 +47,14 @@ export default function IndvTask(){
                 Subtasks ({selectedTask.subtasks.filter((subtask:any)=>subtask.completed === false).length} of {selectedTask.subtasks.length})
             </span>
 
+            <div className="subtasks">
             {selectedTask.subtasks.map((subtask:any)=>(
                 <div className="subtask" key={subtask.id}>
-                    <input type="checkbox" defaultChecked={subtask.completed} id='subtask'/>
-                    <label htmlFor="subtask">{subtask.content}</label>
+                    <input type="checkbox" defaultChecked={subtask.completed} id={subtask.id} onChange={e=>actSubtaskState(e,subtask)}/>
+                    <label htmlFor={subtask.id} className={`${subtask.completed}`}>{subtask.content}</label>
                 </div>
             ))}
-
-            {/* <div className="subtask">
-                <input type="checkbox" defaultChecked={false} id='subtask' />
-                <label htmlFor="subtask">
-                Hola hola que tal!, les quiero contar que ya está disponible en #StarPlusLA la entrevista 
-                </label>
-            </div> */}
+            </div>
             <div className='select'>
                     <span>Status</span>
                     <div className='selected-option' onClick={selectHandler}>
@@ -105,21 +118,32 @@ const Wrapper = styled.div`
         p{
             font-size: 13px;
             color: #828FA3;
+            margin: 20px 0 15px 0;
+            text-justify: distribute;
+            width: 100%;
+            overflow-wrap: break-word;
         }
         span{
-            font-size: 13px;
+            font-size: 12px;
+            margin-top: 20px;
         }
-        .subtask{
+        .subtasks{
+            margin-top: 20px;
+            .subtask{
             display: flex;
-            justify-content: space-around;
+            /* justify-content: space-around; */
             align-items: center;
             background-color: #20212C;
             padding: 15px;
             font-size: 12px;
             border-radius: 5px;
+            margin: 8px 0;
             label{
                 margin-left: 10px;
-                
+                &.true{
+                    text-decoration: line-through;
+                    color: #828FA3;
+                }
             }
             input[type='checkbox']{
                 background-color: #635FC7;
@@ -144,8 +168,10 @@ const Wrapper = styled.div`
                 }
             }
         }
+        }
         .select{
             width: 100%;
+            margin-top: 10px;
             .selected-option{
                 display: flex;
                 justify-content: space-between;
@@ -157,6 +183,7 @@ const Wrapper = styled.div`
                 width: 100%;
                 height: fit-content;
                 padding: 10px;
+                margin-top: 5px;
                 span{
                     margin: 0;
                 }

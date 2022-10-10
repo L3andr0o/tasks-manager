@@ -8,6 +8,7 @@ import { useModals } from '../context/modalsContext';
 import { useAuth } from '../context/authContext';
 import { useData } from '../context/dataContext';
 import IndvTask from '../components/indvTask';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function Home(){
@@ -15,10 +16,11 @@ export default function Home(){
     const {editBoardModal, addNewTaskModal, setEditBoardModal,taskState, setTaskState, setSelectedTask} = useModals()
     const {user, logout} = useAuth();
     const {columns,tasks} = useData();
-    
+    const navigate = useNavigate();
+
     const showTask = (task:any) =>{
         setTaskState(true);
-        setSelectedTask(task)
+        navigate(task.id)
     }
 
     console.log(user)
@@ -29,7 +31,7 @@ export default function Home(){
             console.log(e)
         }
     }
-    
+
     return(
         <Wrapper>
             <GlobalStyles />
@@ -50,8 +52,8 @@ export default function Home(){
                         {columns.map((column:any)=>(
                             <div className="column" key={column.id}>
                                 <h1>
-                                    {column.name}  
-                                    <span> 
+                                    {column.name}
+                                    <span>
                                         ( {tasks.filter((task:any)=>task.column === column.name).length} )
                                     </span>
                                 </h1>
@@ -59,7 +61,7 @@ export default function Home(){
                                     // eslint-disable-next-line array-callback-return
                                     tasks.map((task:any)=>{
                                         if(task.column === column.name){
-                                          return( 
+                                          return(
                                              <div key={task.id} className='task' onClick={()=>showTask(task)}>
                                                 <h1>{task.title}</h1>
                                                 <h2>{
@@ -70,10 +72,10 @@ export default function Home(){
                                     })
                                 }
                             </div>
-                        ))} 
+                        ))}
                         </div>
                     </div>
-                        
+
                 }
                 { editBoardModal && <EditBoardModal />}
                 {addNewTaskModal && <AddNewTaskModal />}
@@ -103,7 +105,7 @@ const Wrapper = styled.div`
             max-width: 1000vw;
             height: 100%;
             .column{
-            width: 18em;
+            width: 17em;
             height: 100%;
             margin: 0 10px;
             /* background-color: #000; */
@@ -112,7 +114,7 @@ const Wrapper = styled.div`
                 text-transform: uppercase;
                 font-size: 14px;
                 font-weight: 300;
-                
+
             }
             .task{
                 width: 100%;
@@ -149,7 +151,7 @@ const Wrapper = styled.div`
         max-width: 30em;
         text-align: center;
         background-color: #20212c;
-        
+
         h1{
             font-size: 18px;
             color: #9292af;
