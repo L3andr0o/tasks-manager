@@ -2,7 +2,7 @@ import styled from "styled-components"
 import {useState,useEffect} from 'react';
 import { useData } from "../context/dataContext";
 import { useModals } from "../context/modalsContext";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { createImportSpecifier } from "typescript";
 
 export default function IndvTask(){
@@ -12,17 +12,26 @@ export default function IndvTask(){
     const {setTaskState, selectedTask, setSelectedTask} = useModals()
     const [selectedColumn, setSelectedColumn] = useState<any>();
     const [selectState, setSelectState] = useState<string | null>(null);
-    
+    const navigate = useNavigate();
+
+    const closeModal = () =>{
+        setTaskState(false);
+        navigate('/');
+        return tasks
+    }
+
     const selectHandler =  ()=> (selectState === 'active') ? setSelectState('hidden') : setSelectState('active');
-    const actSubtaskState = (e:any,subtask : any) =>{
-        subtask.completed = e.target.checked
-        console.log(tasks)
-        }
- 
+    
     const taskx = () =>{
         const xd = tasks.filter((task:any)=> task.id === id.id);
         setSelectedTask(xd[0])
     }
+
+    const actSubtaskState = (e:any,subtask : any) =>{
+        subtask.completed = e.target.checked
+        taskx()
+    }
+ 
 
     useEffect(()=>{
         columns.length > 0 && setSelectedColumn(columns[0].name)
@@ -31,7 +40,7 @@ export default function IndvTask(){
     useEffect(()=>{
         taskx()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
+    },[actSubtaskState ])
 
 
     return(
@@ -70,7 +79,7 @@ export default function IndvTask(){
                     </ul>
                 </div>
         </div>}
-            <div className="bg" onClick={()=>setTaskState(false)}></div>
+            <div className="bg" onClick={()=>closeModal()}></div>
         </Wrapper>
     )
 }
@@ -151,6 +160,12 @@ const Wrapper = styled.div`
                 transform: scale(1.2);
                 background: #234;
                 color: #242;
+
+                &:checked + label{
+                    text-decoration: line-through;
+                    color: #828FA3;
+                }
+
                 &:checked,&:active{
                     &::after{
                         position: absolute;
