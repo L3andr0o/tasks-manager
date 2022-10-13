@@ -28,7 +28,6 @@ export default function IndvTask(){
 
     const actSubtaskState = (e:any,subtask : any) =>{
         subtask.completed = e.target.checked
-        taskx()
     }
  
 
@@ -149,28 +148,11 @@ const Wrapper = styled.div`
                 margin-left: 10px;
             }
             input[type='checkbox']{
-                background-color: #635FC7;
+                accent-color: #635FC7;
                 transform: scale(1.2);
-                background: #234;
-                color: #242;
                 &:checked + label{
                     text-decoration: line-through;
                     color: #828FA3;
-                }
-                &:checked,&:active{
-                    &::after{
-                        position: absolute;
-                        width: 100%;
-                        height: 100%;
-                        top: 0;
-                        left: 0;
-                        background-color: #635FC7;
-                        content: '';
-                        background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/White_check.svg/1200px-White_check.svg.png'); 
-                        background-size: 80%;
-                        background-repeat: no-repeat;
-                        background-position: 2px;
-                    }
                 }
             }
         }
