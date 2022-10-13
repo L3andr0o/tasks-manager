@@ -7,7 +7,7 @@ import { useModals } from "../context/modalsContext";
 export default function AddNewTaskModal(){
 
     const {setAddNewTaskModal} = useModals();
-    const {columns,tasks,setTasks} = useData();
+    const {columns,tasks,setTasks,selectedBoard} = useData();
 
     const [selectedColumn, setSelectedColumn] = useState<any>(columns[0].name);
     const [subtasks, setSubtasks] = useState<any>([
@@ -51,6 +51,7 @@ export default function AddNewTaskModal(){
             description:newTask.description,
             subtasks: subtasks,
             column:selectedColumn,
+            board:selectedBoard
         }
         setTasks([...tasks,task]);
         console.log(tasks)

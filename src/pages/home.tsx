@@ -13,17 +13,16 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Home(){
 
-    const {editBoardModal, addNewTaskModal, setEditBoardModal,taskState, setTaskState, setSelectedTask} = useModals()
+    const {editBoardModal, addNewTaskModal, setEditBoardModal,taskState, setTaskState} = useModals()
     const {user, logout} = useAuth();
-    const {columns,tasks} = useData();
+    const {columns,tasks,selectedBoard} = useData();
+    const [boardTasks, setBoardTasks] = useState<any>();
     const navigate = useNavigate();
 
     const showTask = (task:any) =>{
         setTaskState(true);
         navigate(task.id)
     }
-
-    console.log(user)
     const handleLogout = async () =>{
         try {
             await logout();
@@ -31,6 +30,15 @@ export default function Home(){
             console.log(e)
         }
     }
+    const thoseTasks = () =>{
+        const xd = tasks.filter((task:any)=>task.board === selectedBoard);
+        setBoardTasks(xd)
+    }
+    useEffect(()=>{
+        thoseTasks()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[tasks])
+
 
     return(
         <Wrapper>
@@ -59,13 +67,13 @@ export default function Home(){
                                 </h1>
                                 {
                                     // eslint-disable-next-line array-callback-return
-                                    tasks.map((task:any)=>{
+                                    boardTasks.map((task:any)=>{
                                         if(task.column === column.name){
                                           return(
                                              <div key={task.id} className='task' onClick={()=>showTask(task)}>
                                                 <h1>{task.title}</h1>
                                                 <h2>{
-                                                task.subtasks.filter((subtask:any)=>subtask.completed === false).length} of {task.subtasks.length} subtasks
+                                                task.subtasks.filter((subtask:any)=>subtask.completed === true).length} of {task.subtasks.length} subtasks
                                                 </h2>
                                             </div>)
                                         }

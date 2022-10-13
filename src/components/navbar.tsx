@@ -6,7 +6,7 @@ import { useModals } from '../context/modalsContext';
 export default function NavBar(){
 
     const {setAddNewTaskModal} = useModals();
-    const {boards, selectedBoard, setSelectedBoard} = useData();
+    const {boards, selectedBoard, setSelectedBoard, columns} = useData();
     const [burgerMenuState, setBurgerMenuState] = useState<null | string>(null);
     const burgerMenuHandler = () => (burgerMenuState !== 'visible') ? setBurgerMenuState('visible') : setBurgerMenuState('hidden');
 
@@ -28,7 +28,7 @@ export default function NavBar(){
             </div>
 
             <div className='right'>
-                <div className='add-btn' onClick={()=> setAddNewTaskModal(true)}>
+                <div className={`add-btn ${columns.length > 0}`} onClick={()=> columns.length > 0 && setAddNewTaskModal(true)}>
                     <svg width='12' height='12' xmlns='http://www.w3.org/2000/svg'><path fill='#FFF' d='M7.368 12V7.344H12V4.632H7.368V0H4.656v4.632H0v2.712h4.656V12z'/></svg>
                     <span>Add New Task</span>
                 </div>
@@ -220,6 +220,10 @@ const Wrapper = styled.div`
             border-radius: 15px;
             margin-right: 10px;
             padding: 0 25px;
+            &.false{
+                opacity: .5;
+            }
+
             @media (min-width: 768px){
                 height: 2.5em;
                 border-radius: 25px;

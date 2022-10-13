@@ -17,7 +17,6 @@ export default function IndvTask(){
     const closeModal = () =>{
         setTaskState(false);
         navigate('/');
-        return tasks
     }
 
     const selectHandler =  ()=> (selectState === 'active') ? setSelectState('hidden') : setSelectState('active');
@@ -60,7 +59,7 @@ export default function IndvTask(){
             {selectedTask.subtasks.map((subtask:any)=>(
                 <div className="subtask" key={subtask.id}>
                     <input type="checkbox" defaultChecked={subtask.completed} id={subtask.id} onChange={e=>actSubtaskState(e,subtask)}/>
-                    <label htmlFor={subtask.id} className={`${subtask.completed}`}>{subtask.content}</label>
+                    <label htmlFor={subtask.id}>{subtask.content}</label>
                 </div>
             ))}
             </div>
@@ -140,7 +139,6 @@ const Wrapper = styled.div`
             margin-top: 20px;
             .subtask{
             display: flex;
-            /* justify-content: space-around; */
             align-items: center;
             background-color: #20212C;
             padding: 15px;
@@ -149,23 +147,16 @@ const Wrapper = styled.div`
             margin: 8px 0;
             label{
                 margin-left: 10px;
-                &.true{
-                    text-decoration: line-through;
-                    color: #828FA3;
-                }
             }
             input[type='checkbox']{
                 background-color: #635FC7;
-                /* visibility: hidden; */
                 transform: scale(1.2);
                 background: #234;
                 color: #242;
-
                 &:checked + label{
                     text-decoration: line-through;
                     color: #828FA3;
                 }
-
                 &:checked,&:active{
                     &::after{
                         position: absolute;
