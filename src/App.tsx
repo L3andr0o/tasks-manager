@@ -20,7 +20,7 @@ function App() {
               <Home />
             </ProtectedRoute>
           }/>
-          <Route path='/:id' element={
+          <Route path='/:taskId' element={
             <ProtectedRoute>
               <Home />
             </ProtectedRoute>

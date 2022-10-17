@@ -8,8 +8,9 @@ export default function AddNewBoardModal(){
 
     const {setAddNewBoardModal} = useModals();
     const {setBoards,boards, setColumns, columns} = useData();
+    const [boardName, setBoardName] = useState<string|null>(null);
     const boardInfo = {
-        name:'',
+        name:boardName,
         id:uuidv4()
     }
     const [autoFocus,setAutoFocus] = useState<any>(false);
@@ -38,12 +39,9 @@ export default function AddNewBoardModal(){
         e.preventDefault();
         setBoards([...boards,boardInfo]);
         setColumns([...columns,...modalColumns])
-        console.log(columns);
-        console.log(boards)
     }
     const handleNameChange = (e:any) =>{
-        boardInfo.name = e.target.value;
-        console.log(boardInfo.name)
+        setBoardName(e.target.value)
     }
 
 

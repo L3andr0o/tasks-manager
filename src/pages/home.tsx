@@ -8,7 +8,7 @@ import { useModals } from '../context/modalsContext';
 import { useAuth } from '../context/authContext';
 import { useData } from '../context/dataContext';
 import IndvTask from '../components/indvTask';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import AddNewBoardModal from '../components/addNewBoardModal';
 
 export default function Home(){
@@ -18,6 +18,7 @@ export default function Home(){
   const {columns,tasks,selectedBoard} = useData();
   const [boardTasks, setBoardTasks] = useState<any>();
   const navigate = useNavigate();
+  const xd = useParams();
 
   const showTask = (task:any) =>{
     setTaskState(true);
@@ -38,7 +39,7 @@ export default function Home(){
     thoseTasks()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[tasks])
-
+  
 
   return(
     <Wrapper>

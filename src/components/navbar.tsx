@@ -17,6 +17,7 @@ export default function NavBar(){
 
 
 
+
     return(
         <Wrapper>
             <div className='left'>
@@ -49,7 +50,7 @@ export default function NavBar(){
                     <ul>
                     {
                         boards.map((board:any)=>(
-                            <li key={board.id}>
+                        <li key={board.id} className={selectedBoard.id === board.id ? 'selectedBoard' : ''} onClick={()=>setSelectedBoard(board)}>
                             <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg"><path d="M0 2.889A2.889 2.889 0 0 1 2.889 0H13.11A2.889 2.889 0 0 1 16 2.889V13.11A2.888 2.888 0 0 1 13.111 16H2.89A2.889 2.889 0 0 1 0 13.111V2.89Zm1.333 5.555v4.667c0 .859.697 1.556 1.556 1.556h6.889V8.444H1.333Zm8.445-1.333V1.333h-6.89A1.556 1.556 0 0 0 1.334 2.89V7.11h8.445Zm4.889-1.333H11.11v4.444h3.556V5.778Zm0 5.778H11.11v3.11h2a1.556 1.556 0 0 0 1.556-1.555v-1.555Zm0-7.112V2.89a1.555 1.555 0 0 0-1.556-1.556h-2v3.111h3.556Z" fill="#828FA3"/></svg>
                             <span>{board.name}</span>
                         </li> 
@@ -275,7 +276,7 @@ const Wrapper = styled.div`
         height: fit-content;
         left: 10%;
         border-radius: 5px;
-        padding: 15px 20px;
+        padding: 15px 0px;
         z-index: 200;
         .content{
             height: fit-content;
@@ -339,20 +340,36 @@ const Wrapper = styled.div`
             letter-spacing: 2px;
             color: #9292af;
             font-weight: 300;
+            margin: 0 15px;
         }
         ul{
             display: flex;
             flex-direction: column;
-            align-items: center;
+            /* align-items: center; */
             justify-content: space-between;
             width: fit-content;
             margin: 10px 0;
+            width: 100%;
             li{
                 color: #fff;
                 padding: 10px 0;
                 text-align: left;
-                /* background-color: #000; */
-                width: 100%;
+                width: 90%;
+                position: relative;
+                padding-left: 15px;
+               &.selectedBoard{
+                &::after{
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    height: 100%;
+                    width: 100%;
+                    background-color: #635fc7;
+                    z-index: -1;
+                    border-radius: 0 25px 25px 0;
+                }
+               }
                 svg{
                     margin-right: 8px;
                     path{
@@ -363,7 +380,7 @@ const Wrapper = styled.div`
         }
         .create-board{
             color: #635fc7;
-            /* background-color: #000; */
+            margin: 0 15px;
             svg{
                 margin-right: 8px;
                 path{
@@ -372,7 +389,8 @@ const Wrapper = styled.div`
             }
         }
         .sidebar-bottom{
-            width: 100%;
+            margin: 0 auto;
+            width: 90%;
             .theme-changer{
             width: 100%;
             background-color: #2b2c37;
