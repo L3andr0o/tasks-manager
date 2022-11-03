@@ -1,5 +1,6 @@
 import { uuidv4 } from "@firebase/util";
 import { useState } from "react"
+import { useParams } from "react-router-dom";
 import styled from "styled-components"
 import { useData } from "../context/dataContext";
 import { useModals } from "../context/modalsContext";
@@ -8,7 +9,7 @@ export default function AddNewTaskModal(){
 
     const {setAddNewTaskModal} = useModals();
     const {columns,tasks,setTasks,selectedBoard} = useData();
-
+    const board = useParams();
     const [selectedColumn, setSelectedColumn] = useState<any>(columns[0].name);
     const [subtasks, setSubtasks] = useState<any>([
         {content:'',
@@ -42,7 +43,10 @@ export default function AddNewTaskModal(){
         setSubtasks(subtasksAct)
     }
     const [selectState, setSelectState] = useState<string | null>(null);
-    const selectHandler =  ()=> (selectState === 'active') ? setSelectState('hidden') : setSelectState('active');
+    const selectHandler =  ()=>{
+        (selectState === 'active') ? setSelectState('hidden') : setSelectState('active')
+        console.log('hola')
+    };
     const createTask = (e:any)=>{
         e.preventDefault()
         const task : any= {
@@ -51,7 +55,7 @@ export default function AddNewTaskModal(){
             description:newTask.description,
             subtasks: subtasks,
             column:selectedColumn,
-            board:selectedBoard
+            board:selectedBoard.id
         }
         setTasks([...tasks,task]);
         console.log(tasks)
@@ -84,14 +88,16 @@ export default function AddNewTaskModal(){
                     </div>
                     <div className='select'>
                         <span>Status</span>
-                        <div className='selected-option' onClick={selectHandler}>
+                        <div className='selected-option' onClick={()=>selectHandler()}>
                             <span>{selectedColumn}</span>
                             <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg"><path stroke="#635FC7" strokeWidth="2" fill="none" d="m1 1 4 4 4-4"/></svg>
                         </div>
                         <ul className={selectState!}>
                             {columns.map((column:any)=>(
+                                column.boardId === board &&  
                                 <li key={column.id} onClick={()=>setSelectedColumn(column.name)}>{column.name}</li>
                             ))}
+                            <li>adfa</li>
                         </ul>
                     </div>
                     <button className="tasks-btn" onClick={e=>createTask(e)}>Create Task</button>

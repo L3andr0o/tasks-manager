@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useData } from '../context/dataContext';
 import { useModals } from '../context/modalsContext';
@@ -9,8 +9,10 @@ export default function NavBar(){
     const {setAddNewTaskModal,setAddNewBoardModal} = useModals();
     const {boards, selectedBoard, setSelectedBoard, columns} = useData();
     const [burgerMenuState, setBurgerMenuState] = useState<null | string>(null);
+    const [boardColumns, setBoardColumns] = useState<any>([]);
     const burgerMenuHandler = () => (burgerMenuState !== 'visible') ? setBurgerMenuState('visible') : setBurgerMenuState('hidden');
     const navigate = useNavigate();
+    const board = useParams()
 
 
     const openAddNewBoardModal = () => {
@@ -21,7 +23,9 @@ export default function NavBar(){
         setSelectedBoard(board);
         navigate(`/${board.id}`)
     }
-
+    useEffect(()=>{
+        setBoardColumns(columns.filter((column:any)=>column.boardId === board.board))
+    },[columns,board])
 
 
     return(
@@ -40,7 +44,7 @@ export default function NavBar(){
             </div>
 
             <div className='right'>
-                <div className={`add-btn ${columns.length > 0}`} onClick={()=> columns.length > 0 && setAddNewTaskModal(true)}>
+                <div className={`add-btn ${boardColumns.length > 0}`} onClick={()=> boardColumns.length > 0 && setAddNewTaskModal(true)}>
                     <svg width='12' height='12' xmlns='http://www.w3.org/2000/svg'><path fill='#FFF' d='M7.368 12V7.344H12V4.632H7.368V0H4.656v4.632H0v2.712h4.656V12z'/></svg>
                     <span>Add New Task</span>
                 </div>

@@ -13,17 +13,19 @@ import AddNewBoardModal from '../components/addNewBoardModal';
 
 export default function Home(){
 
-  const {editBoardModal, addNewTaskModal, setEditBoardModal,taskState, setTaskState, addNewBoardModal} = useModals()
+  const {editBoardModal, addNewTaskModal, setEditBoardModal,taskState, setTaskState, addNewBoardModal,setSelectedTask} = useModals()
   const {user, logout} = useAuth();
   const {columns,tasks,selectedBoard} = useData();
-  const [boardTasks, setBoardTasks] = useState<any>();
+  const [boardTasks, setBoardTasks] = useState<any>(null);
+  const [boardColumns, setBoardColumns] = useState<any>([]);
   const navigate = useNavigate();
-  const xd = useParams();
+  const boardId = useParams();
 
-  const showTask = (task:any) =>{
-    setTaskState(true);
-    navigate(task.id)
-  }
+  const showTask = (task:any) =>{  
+  	setTaskState(true);
+		setSelectedTask(task)
+};
+  
   const handleLogout = async () =>{
     try {
       await logout();
@@ -31,26 +33,22 @@ export default function Home(){
       console.log(e)
     }
   }
-  const thoseTasks = () =>{
-    const xd = tasks.filter((task:any)=>task.board === selectedBoard);
-    setBoardTasks(xd)
-  }
-  useEffect(()=>{
-    thoseTasks()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[tasks])
-  
   useEffect(()=>{
     navigate(`/${selectedBoard.id}`)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
+  useEffect(()=>{
+    setBoardColumns(columns.filter((column:any)=>column.boardId === boardId.board));
+    setBoardTasks(tasks.filter((task:any)=>task.board === boardId.board));
+		console.log(columns)
+  },[columns,boardId,tasks])
 
   return(
     <Wrapper>
         <GlobalStyles />
         <NavBar />
         {
-          columns.length === 0
+          boardColumns.length === 0
             ?
           <div className="content">
             <div className="empty">
@@ -62,7 +60,7 @@ export default function Home(){
             :
           <div className='columns'>
             <div className="container">
-              {/* {columns.map((column:any)=>(
+              {boardColumns.length > 0 && boardColumns.map((column:any)=>(
               <div className="column" key={column.id}>
                 <h1>
                   {column.name} 
@@ -72,8 +70,8 @@ export default function Home(){
                 </h1>
                   {
                   // eslint-disable-next-line array-callback-return
-                  boardTasks.map((task:any)=>{
-                    if(task.column === column.name){
+                  boardTasks && boardTasks.map((task:any)=>{
+                    if(task.column === column.name || task.board === boardId.board){
                       return(
                         <div key={task.id} className='task' onClick={()=>showTask(task)}>
                           <h1>{task.title}</h1>
@@ -85,7 +83,7 @@ export default function Home(){
                   })
                   }
               </div>
-              ))} */}
+              ))} 
             </div>
           </div>
         }

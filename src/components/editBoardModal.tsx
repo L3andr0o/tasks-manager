@@ -3,6 +3,7 @@ import { useModals } from "../context/modalsContext"
 import { v4 as uuidv4 } from 'uuid';
 import { useData } from "../context/dataContext";
 import {useState, useEffect} from 'react';
+import { useParams } from "react-router-dom";
 
 
 export default function EditBoardModal(props : any){
@@ -11,6 +12,8 @@ export default function EditBoardModal(props : any){
     const {columns, setColumns,boards,setBoards,selectedBoard} = useData();
     const [modalColumns,setModalColumns] = useState<any>([]);
     const [autoFocus, setAutoFocus] = useState<boolean>(false)
+
+    const board = useParams();
 
     const addNewColumn = (e:any,column:any)=>{
         e.preventDefault()
@@ -44,18 +47,19 @@ export default function EditBoardModal(props : any){
     }
     const saveChanges = (e:any) =>{
         e.preventDefault()
+        console.log(board.board)
         modalColumns.forEach((column:any)=>{
             if(column.name.length <= 0){
                 alert('name cant be empty')
                 return
             }setEditBoardModal(false)
-            setColumns(modalColumns)
+            setColumns([...modalColumns,...columns])
             setAutoFocus(false)
         })
         
     }
     useEffect(()=>{
-        setModalColumns(columns)
+        setModalColumns(columns.filter((column:any)=>column.boardId === board))
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 
@@ -80,7 +84,7 @@ export default function EditBoardModal(props : any){
                         ))
                     }
                     <div className="buttons">
-                        <button className="add-new-column" onClick={(e)=>{addNewColumn(e,{name:'',id:uuidv4()})}}>+ Add New Column</button>
+                        <button className="add-new-column" onClick={(e)=>{addNewColumn(e,{name:'',id:uuidv4(),boardId:board.board})}}>+ Add New Column</button>
                         <button className="save-changes" onClick={e=>saveChanges(e)}>Save Changes</button>
                     </div>
                 </form>

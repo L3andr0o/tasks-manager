@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { useModals } from '../context/modalsContext'
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import { uuidv4 } from '@firebase/util';
 import { useData } from '../context/dataContext';
 
@@ -9,9 +9,10 @@ export default function AddNewBoardModal(){
     const {setAddNewBoardModal} = useModals();
     const {setBoards,boards, setColumns, columns} = useData();
     const [boardName, setBoardName] = useState<string|null>(null);
+    const [boardId, setBoardId] = useState<any>();
     const boardInfo = {
         name:boardName,
-        id:uuidv4()
+        id:boardId
     }
     const [autoFocus,setAutoFocus] = useState<any>(false);
     const [modalColumns,setModalColumns] = useState<any>([]);
@@ -38,11 +39,16 @@ export default function AddNewBoardModal(){
     const saveChanges = (e:any) =>{
         e.preventDefault();
         setBoards([...boards,boardInfo]);
-        setColumns([...columns,...modalColumns])
+        setColumns([...modalColumns,...columns])
+        console.log(columns)
+        console.log(boards)
     }
     const handleNameChange = (e:any) =>{
         setBoardName(e.target.value)
     }
+    useEffect(()=>{
+      setBoardId(uuidv4())
+    },[])
 
 
     return(
@@ -63,7 +69,7 @@ export default function AddNewBoardModal(){
                         </div>
                         ))}
                 <div className="buttons">
-                    <button className="add-new-column" onClick={e=>addNewColumn(e,{name:'',id:uuidv4(),board:boardInfo.name})}>+ Add New Column</button>
+                    <button className="add-new-column" onClick={e=>addNewColumn(e,{name:'',id:uuidv4(),boardId:boardId})}>+ Add New Column</button>
                     <button className="save-changes" onClick={e=>saveChanges(e)}>Save Changes</button>
                 </div>
             </form>

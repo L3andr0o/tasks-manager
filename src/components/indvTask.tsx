@@ -7,43 +7,44 @@ import { useNavigate, useParams } from "react-router-dom";
 
 export default function IndvTask(){
 
-  const id = useParams();
+
   const {columns,tasks} = useData();
   const {setTaskState, selectedTask, setSelectedTask} = useModals()
   const [selectedColumn, setSelectedColumn] = useState<any>();
   const [selectState, setSelectState] = useState<string | null>(null);
   const navigate = useNavigate();
+  const board = useParams()
 
   const closeModal = () =>{
     setTaskState(false);
-    navigate('/');
+    navigate(`/${board.board}`);
   }
 
   const selectHandler =  ()=> (selectState === 'active') ? setSelectState('hidden') : setSelectState('active');
-    
-  const taskx = () =>{
-    const xd = tasks.filter((task:any)=> task.id === id.id);
-    setSelectedTask(xd[0])
-  }
+
+  // const taskx = () =>{
+  //   const xd = tasks.filter((task:any)=> task.id === id.id);
+  //   setSelectedTask(xd[0])
+  // }
 
   const actSubtaskState = (e:any,subtask : any) =>{
     subtask.completed = e.target.checked
   }
- 
+
 
   useEffect(()=>{
     columns.length > 0 && setSelectedColumn(columns[0].name)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
-  useEffect(()=>{
-    taskx()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[actSubtaskState])
+  // useEffect(()=>{
+  //   taskx()
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // },[actSubtaskState])
 
 
   return(
     <Wrapper>
-      {selectedTask && 
+      {selectedTask &&
         <div className="modal" key={selectedTask.id}>
           <div className="top">
             <h1>{selectedTask.title}</h1>
@@ -68,7 +69,7 @@ export default function IndvTask(){
               <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg"><path stroke="#635FC7" strokeWidth="2" fill="none" d="m1 1 4 4 4-4"/></svg>
             </div>
             <ul className={selectState!}>
-              {(columns.length > 0) && 
+              {(columns.length > 0) &&
                 columns.map((column:any)=>(
                   <li key={column.id} onClick={()=>setSelectedColumn(column.name)}>{column.name}</li>
                 ))
@@ -91,7 +92,7 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;  
+  flex-direction: column;
   .bg{
     width: 100%;
     height: 100%;
