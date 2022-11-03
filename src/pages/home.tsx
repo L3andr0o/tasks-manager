@@ -40,6 +40,10 @@ export default function Home(){
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[tasks])
   
+  useEffect(()=>{
+    navigate(`/${selectedBoard.id}`)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
 
   return(
     <Wrapper>

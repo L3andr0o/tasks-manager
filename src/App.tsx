@@ -20,11 +20,16 @@ function App() {
               <Home />
             </ProtectedRoute>
           }/>
-          <Route path='/:taskId' element={
+          <Route path='/:board' element={
             <ProtectedRoute>
               <Home />
             </ProtectedRoute>
           }/>
+          {/* <Route path='/board/:taskId' element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }/> */}
           <Route path='/login' element={<Login />} />
         </Routes>
       </ModalsProvider>
