@@ -94,10 +94,10 @@ export default function AddNewTaskModal(){
                         </div>
                         <ul className={selectState!}>
                             {columns.map((column:any)=>(
-                                column.boardId === board &&  
-                                <li key={column.id} onClick={()=>setSelectedColumn(column.name)}>{column.name}</li>
+                                column.boardId === board.board &&  
+                                <li key={column.id} onClick={()=>setSelectedColumn(column.name)} 
+                                className={`${column.name === selectedColumn}`}>{column.name}</li>
                             ))}
-                            <li>adfa</li>
                         </ul>
                     </div>
                     <button className="tasks-btn" onClick={e=>createTask(e)}>Create Task</button>
@@ -219,6 +219,9 @@ const Wrapper = styled.div`
                     border: 1px solid #ffffff28;
                     font-size: 12px;
                     font-weight: 600;
+                    &.true{
+                        background-color: #3e3f4b;
+                    }
                 }
             }
         }

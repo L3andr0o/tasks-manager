@@ -14,33 +14,32 @@ export default function IndvTask(){
   const [selectState, setSelectState] = useState<string | null>(null);
   const navigate = useNavigate();
   const board = useParams()
+  const [boardColumns, setBoardColumns] = useState<any>([]);
 
   const closeModal = () =>{
     setTaskState(false);
     navigate(`/${board.board}`);
+    selectedTask.column = selectedColumn
   }
 
   const selectHandler =  ()=> (selectState === 'active') ? setSelectState('hidden') : setSelectState('active');
 
-  // const taskx = () =>{
-  //   const xd = tasks.filter((task:any)=> task.id === id.id);
-  //   setSelectedTask(xd[0])
-  // }
-
   const actSubtaskState = (e:any,subtask : any) =>{
     subtask.completed = e.target.checked
   }
-
-
   useEffect(()=>{
-    columns.length > 0 && setSelectedColumn(columns[0].name)
+    setBoardColumns(columns.filter((column:any)=>column.boardId === board.board));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
-  // useEffect(()=>{
-  //   taskx()
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // },[actSubtaskState])
-
+  useEffect(()=>{
+    // eslint-disable-next-line array-callback-return
+    boardColumns.map((column:any)=>{
+      if(column.name === selectedTask.column){
+        setSelectedColumn(column.name);
+        return column
+      }else{ console.log('xd')}
+    })
+  },[boardColumns,selectedTask])
 
   return(
     <Wrapper>

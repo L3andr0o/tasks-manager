@@ -71,7 +71,7 @@ export default function Home(){
                   {
                   // eslint-disable-next-line array-callback-return
                   boardTasks && boardTasks.map((task:any)=>{
-                    if(task.column === column.name || task.board === boardId.board){
+                    if(task.column === column.name && task.board === boardId.board){
                       return(
                         <div key={task.id} className='task' onClick={()=>showTask(task)}>
                           <h1>{task.title}</h1>
