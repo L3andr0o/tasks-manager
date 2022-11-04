@@ -91,12 +91,15 @@ const Wrapper = styled.div`
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    z-index: 250;
+
     .bg{
         width: 100%;
         height: 100%;
         position: absolute;
         left: 0;
         top: 0;
+        z-index: 250;
     }
     .modal{
         width: 90%;

@@ -14,6 +14,8 @@ export default function ModalsProvider({children} : any){
     const [selectedTask, setSelectedTask] = useState<any>(null);
     const [taskState, setTaskState] = useState<any>(false);
     const [addNewBoardModal, setAddNewBoardModal] = useState<any>(false);
+    const [deleteTaskModal, setDeleteTaskModal] = useState<boolean>(false);
+    const [editTaskModal,setEditTaskModal] = useState<boolean>(false);
 
     return(
         <modalsContext.Provider 
@@ -27,7 +29,11 @@ export default function ModalsProvider({children} : any){
             taskState,
             setTaskState,
             addNewBoardModal,
-            setAddNewBoardModal
+            setAddNewBoardModal,
+            deleteTaskModal,
+            setDeleteTaskModal,
+            editTaskModal,
+            setEditTaskModal
             }}>
             {children}
         </modalsContext.Provider>

@@ -8,13 +8,14 @@ import { useNavigate, useParams } from "react-router-dom";
 export default function IndvTask(){
 
 
-  const {columns,tasks} = useData();
-  const {setTaskState, selectedTask, setSelectedTask} = useModals()
+  const {columns} = useData();
+  const {setTaskState, selectedTask,setDeleteTaskModal,setEditTaskModal} = useModals()
   const [selectedColumn, setSelectedColumn] = useState<any>();
   const [selectState, setSelectState] = useState<string | null>(null);
+  const [boardColumns, setBoardColumns] = useState<any>([]);
+  const [menuState, setMenuState] = useState<boolean>(false);
   const navigate = useNavigate();
   const board = useParams()
-  const [boardColumns, setBoardColumns] = useState<any>([]);
 
   const closeModal = () =>{
     setTaskState(false);
@@ -23,6 +24,15 @@ export default function IndvTask(){
   }
 
   const selectHandler =  ()=> (selectState === 'active') ? setSelectState('hidden') : setSelectState('active');
+  const menuHandler = ()=> menuState ? setMenuState(false) : setMenuState(true);
+  const deleteModalHandler = () =>{
+    setDeleteTaskModal(true);
+    setTaskState(false);
+  }
+  const editModalHandler = () =>{
+    setEditTaskModal(true);
+    setTaskState(false)
+  }
 
   const actSubtaskState = (e:any,subtask : any) =>{
     subtask.completed = e.target.checked
@@ -47,20 +57,25 @@ export default function IndvTask(){
         <div className="modal" key={selectedTask.id}>
           <div className="top">
             <h1>{selectedTask.title}</h1>
-            <svg width='5' height='20' xmlns='http://www.w3.org/2000/svg'><g fill='#828FA3' fillRule='evenodd'><circle cx='2.308' cy='2.308' r='2.308'/><circle cx='2.308' cy='10' r='2.308'/><circle cx='2.308' cy='17.692' r='2.308'/></g></svg>
+            <svg width='5' height='20' xmlns='http://www.w3.org/2000/svg' onClick={menuHandler}><g fill='#828FA3' fillRule='evenodd'><circle cx='2.308' cy='2.308' r='2.308'/><circle cx='2.308' cy='10' r='2.308'/><circle cx='2.308' cy='17.692' r='2.308'/></g></svg>
+            {menuState && 
+            <div className="taskMenu">
+              <span className="editTask" onClick={editModalHandler} >Edit Task</span>
+              <span className="deleteTask" onClick={deleteModalHandler} >Delete Task</span>
+            </div>}
           </div>
           <p>{selectedTask.description}</p>
           <span>
             Subtasks ({selectedTask.subtasks.filter((subtask:any)=>subtask.completed === true).length} of {selectedTask.subtasks.length})
           </span>
           <div className="subtasks">
-          {selectedTask.subtasks.map((subtask:any)=>(
-            <div className="subtask" key={subtask.id}>
-              <input type="checkbox" defaultChecked={subtask.completed} id={subtask.id} onChange={e=>actSubtaskState(e,subtask)} />
-              <label htmlFor={subtask.id}>{subtask.content}</label>
-            </div>
-          ))}
-            </div>
+            {selectedTask.subtasks.map((subtask:any)=>(
+              <div className="subtask" key={subtask.id}>
+                <input type="checkbox" defaultChecked={subtask.completed} id={subtask.id} onChange={e=>actSubtaskState(e,subtask)} />
+                <label htmlFor={subtask.id}>{subtask.content}</label>
+              </div>
+            ))}
+          </div>
           <div className='select'>
             <span>Status</span>
             <div className='selected-option' onClick={selectHandler}>
@@ -112,56 +127,84 @@ const Wrapper = styled.div`
       @keyframes show {
         100%{transform:scale(1)}
       }
+      p{
+        font-size: 13px;
+        color: #828FA3;
+        margin: 20px 0 15px 0;
+        text-justify: distribute;
+        width: 100%;
+        overflow-wrap: break-word;
+      }
+      span{
+        font-size: 12px;
+        margin-top: 20px;
+      }
       .top{
         display: flex;
         align-items: center;
         width: 100%;
         justify-content: space-between;
+        position: relative;
         h1{
           font-size: 16px;
         }
-        }
-        p{
-          font-size: 13px;
-          color: #828FA3;
-          margin: 20px 0 15px 0;
-          text-justify: distribute;
-          width: 100%;
-          overflow-wrap: break-word;
-        }
-        span{
-          font-size: 12px;
-          margin-top: 20px;
-        }
-        .subtasks{
-          margin-top: 20px;
-          .subtask{
+        .taskMenu{
+          position: absolute;
+          right: -12%;
+          z-index: 2000;
+          bottom: -100px;
+          display: flex;
+          flex-direction: column;
+          background-color: #20212C;
+          width: 8em;
+          padding: 10px;
+          justify-content: space-around;
+          height: 5em;
+          border-radius: 5px;
+          span{
+            height: 50%;
+            margin: 0;
             display: flex;
             align-items: center;
-            background-color: #20212C;
-            padding: 15px;
-            font-size: 12px;
-            border-radius: 5px;
-            margin: 8px 0;
-            label{
-              margin-left: 10px;
-              width: 100%;
+            &.editTask{
+              color: #828FA3;
             }
-            input[type='checkbox']{
-              transform: scale(1.2);
-              &:checked{
-              accent-color: #635FC7;
-              }
-              &:focus{
-              accent-color: #837fda;
-              }
-              &:checked + label{
-                text-decoration: line-through;
-                color: #828FA3;
-              }
+            &.deleteTask{
+              color: #EA5555;
             }
           }
         }
+      }
+
+      .subtasks{
+        margin-top: 20px;
+        .subtask{
+          display: flex;
+          align-items: center;
+          background-color: #20212C;
+          padding: 15px;
+          font-size: 12px;
+          border-radius: 5px;
+          margin: 8px 0;
+          label{
+            margin-left: 10px;
+            width: 100%;
+          }
+          input[type='checkbox']{
+            transform: scale(1.2);
+            &:checked{
+            accent-color: #635FC7;
+            }
+            &:focus{
+            accent-color: #837fda;
+            }
+            &:checked + label{
+              text-decoration: line-through;
+               color: #828FA3;
+            }
+          }
+        }
+      }
         .select{
           width: 100%;
           margin-top: 10px;

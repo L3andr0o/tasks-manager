@@ -10,10 +10,12 @@ import { useData } from '../context/dataContext';
 import IndvTask from '../components/indvTask';
 import { useNavigate, useParams } from 'react-router-dom';
 import AddNewBoardModal from '../components/addNewBoardModal';
+import DeleteTaskModal from '../components/deleteTaskModal';
+import EditTaskModal from '../components/editTaskModal';
 
 export default function Home(){
 
-  const {editBoardModal, addNewTaskModal, setEditBoardModal,taskState, setTaskState, addNewBoardModal,setSelectedTask} = useModals()
+  const {editBoardModal, addNewTaskModal, setEditBoardModal,taskState, setTaskState, addNewBoardModal,setSelectedTask,deleteTaskModal,editTaskModal} = useModals()
   const {user, logout} = useAuth();
   const {columns,tasks,selectedBoard} = useData();
   const [boardTasks, setBoardTasks] = useState<any>(null);
@@ -91,6 +93,8 @@ export default function Home(){
         {addNewTaskModal && <AddNewTaskModal />}
         {taskState && <IndvTask />}
         {addNewBoardModal && <AddNewBoardModal />}
+        {deleteTaskModal && <DeleteTaskModal />}
+        {editTaskModal && <EditTaskModal />}
     </Wrapper>
   )
 }
