@@ -26,7 +26,7 @@ export default function NavBar(){
     useEffect(()=>{
         setBoardColumns(columns.filter((column:any)=>column.boardId === board.board))
     },[columns,board])
-
+   
 
     return(
         <Wrapper>

@@ -11,29 +11,28 @@ export default function EditTaskModal(){
     const {columns,tasks} = useData()
     const board = useParams()
 
-    const [newTask, setNewTask] = useState({title:'',description:''})
+    const [newTask, setNewTask] = useState({title:selectedTask.title,description:selectedTask.description})
     const handleChange = ({target : {name, value}}:any) =>setNewTask({...newTask, [name]: value});
-    const [modalSubtasks,setModalSubtasks] = useState<any>();
+    const [modalSubtasks,setModalSubtasks] = useState<any>(null);
 
     const addNewSubtask = (e:any,subtask:any)=>{
         e.preventDefault();
-        // const subtasksAct = [];
-        // subtasksAct.push(...selectedTask.subtasks,subtask);
-        // selectedTask.subtasks = subtasksAct
-        selectedTask.subtasks.push(subtask)
+        const subtasksAct = [];
+        subtasksAct.push(...modalSubtasks,subtask);
+        setModalSubtasks(subtasksAct)
     }
     const deleteSubtask = (id:any)=>{
-        const subtasksAct = selectedTask.subtasks.filter((subtask:any)=>subtask.id !== id);
-        selectedTask.subtasks = subtasksAct
+        const subtasksAct = modalSubtasks.filter((subtask:any)=>subtask.id !== id);
+        setModalSubtasks(subtasksAct);
     }
     const actSubtask = (e:any,id:any)=>{
-        const subtasksAct = selectedTask.subtasks.map((subtask:any)=>{
+        const subtasksAct = modalSubtasks.map((subtask:any)=>{
             if(subtask.id === id){
                 subtask.content = e.target.value;
             }
             return subtask
         })
-        selectedTask.subtasks = subtasksAct
+        setModalSubtasks(subtasksAct)
     }
   const [boardColumns, setBoardColumns] = useState<any>([]);
   const [selectedColumn, setSelectedColumn] = useState<any>();
@@ -43,7 +42,9 @@ export default function EditTaskModal(){
   const createTask = (e:any)=>{
     e.preventDefault()
     selectedTask.title = newTask.title;
-    selectedTask.description = newTask.description
+    selectedTask.description = newTask.description;
+    selectedTask.subtasks = modalSubtasks;
+    selectedTask.column = selectedColumn;
     console.log(selectedTask);
     console.log(tasks);
 }
@@ -52,7 +53,8 @@ export default function EditTaskModal(){
         setBoardColumns(columns.filter((column:any)=>column.boardId === board.board));
         // eslint-disable-next-line react-hooks/exhaustive-deps
       },[])
-      useEffect(()=>{
+
+    useEffect(()=>{
         // eslint-disable-next-line array-callback-return
         boardColumns.map((column:any)=>{
           if(column.name === selectedTask.column){
@@ -61,9 +63,10 @@ export default function EditTaskModal(){
           }else{ console.log('xd')}
         })
       },[boardColumns,selectedTask])
-      useEffect(()=>{
+
+    useEffect(()=>{
         setModalSubtasks(selectedTask.subtasks)
-      },[selectedTask])
+    },[selectedTask.subtasks])
 
     return(
         <Wrapper >

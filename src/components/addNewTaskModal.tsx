@@ -58,7 +58,8 @@ export default function AddNewTaskModal(){
             board:selectedBoard.id
         }
         setTasks([...tasks,task]);
-        console.log(tasks)
+        console.log(tasks);
+        setAddNewTaskModal(false)
     }
 
 

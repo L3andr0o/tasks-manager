@@ -3,6 +3,7 @@ import { useModals } from '../context/modalsContext'
 import {useState, useEffect} from 'react';
 import { uuidv4 } from '@firebase/util';
 import { useData } from '../context/dataContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function AddNewBoardModal(){
 
@@ -14,6 +15,7 @@ export default function AddNewBoardModal(){
         name:boardName,
         id:boardId
     }
+    const navigate = useNavigate();
     const [autoFocus,setAutoFocus] = useState<any>(false);
     const [modalColumns,setModalColumns] = useState<any>([]);
     const addNewColumn = (e:any,column:any)=>{
@@ -39,9 +41,9 @@ export default function AddNewBoardModal(){
     const saveChanges = (e:any) =>{
         e.preventDefault();
         setBoards([...boards,boardInfo]);
-        setColumns([...modalColumns,...columns])
-        console.log(columns)
-        console.log(boards)
+        setColumns([...modalColumns,...columns]);
+        setAddNewBoardModal(false);
+        navigate(`/${boardId}`)
     }
     const handleNameChange = (e:any) =>{
         setBoardName(e.target.value)
@@ -91,15 +93,12 @@ const Wrapper = styled.div`
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    z-index: 250;
-
     .bg{
         width: 100%;
         height: 100%;
         position: absolute;
         left: 0;
         top: 0;
-        z-index: 250;
     }
     .modal{
         width: 90%;

@@ -8,7 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 export default function IndvTask(){
 
 
-  const {columns} = useData();
+  const {columns,tasks} = useData();
   const {setTaskState, selectedTask,setDeleteTaskModal,setEditTaskModal} = useModals()
   const [selectedColumn, setSelectedColumn] = useState<any>();
   const [selectState, setSelectState] = useState<string | null>(null);
@@ -35,7 +35,8 @@ export default function IndvTask(){
   }
 
   const actSubtaskState = (e:any,subtask : any) =>{
-    subtask.completed = e.target.checked
+    subtask.completed = e.target.checked;
+    console.log(tasks)
   }
   useEffect(()=>{
     setBoardColumns(columns.filter((column:any)=>column.boardId === board.board));
