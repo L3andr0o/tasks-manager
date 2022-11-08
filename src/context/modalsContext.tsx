@@ -16,6 +16,7 @@ export default function ModalsProvider({children} : any){
     const [addNewBoardModal, setAddNewBoardModal] = useState<any>(false);
     const [deleteTaskModal, setDeleteTaskModal] = useState<boolean>(false);
     const [editTaskModal,setEditTaskModal] = useState<boolean>(false);
+    const [deleteBoardModal,setDeleteBoardModal] = useState<boolean>(false);
 
     return(
         <modalsContext.Provider 
@@ -33,7 +34,9 @@ export default function ModalsProvider({children} : any){
             deleteTaskModal,
             setDeleteTaskModal,
             editTaskModal,
-            setEditTaskModal
+            setEditTaskModal,
+            deleteBoardModal,
+            setDeleteBoardModal
             }}>
             {children}
         </modalsContext.Provider>

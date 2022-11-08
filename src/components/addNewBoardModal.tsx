@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 export default function AddNewBoardModal(){
 
     const {setAddNewBoardModal} = useModals();
-    const {setBoards,boards, setColumns, columns} = useData();
+    const {setBoards,boards, setColumns, columns, setSelectedBoard} = useData();
     const [boardName, setBoardName] = useState<string|null>(null);
     const [boardId, setBoardId] = useState<any>();
     const boardInfo = {
@@ -43,6 +43,7 @@ export default function AddNewBoardModal(){
         setBoards([...boards,boardInfo]);
         setColumns([...modalColumns,...columns]);
         setAddNewBoardModal(false);
+        setSelectedBoard(boardInfo)
         navigate(`/${boardId}`)
     }
     const handleNameChange = (e:any) =>{

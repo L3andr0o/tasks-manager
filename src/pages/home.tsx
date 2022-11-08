@@ -12,12 +12,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import AddNewBoardModal from '../components/addNewBoardModal';
 import DeleteTaskModal from '../components/deleteTaskModal';
 import EditTaskModal from '../components/editTaskModal';
+import DeleteBoardModal from '../components/deleteBoardModal';
 
 export default function Home(){
 
-  const {editBoardModal, addNewTaskModal, setEditBoardModal,taskState, setTaskState, addNewBoardModal,setSelectedTask,deleteTaskModal,editTaskModal} = useModals()
+  const {editBoardModal, addNewTaskModal, setEditBoardModal,taskState, setTaskState, addNewBoardModal,setSelectedTask,deleteTaskModal,editTaskModal,deleteBoardModal} = useModals()
   const {user, logout} = useAuth();
-  const {columns,tasks,selectedBoard} = useData();
+  const {columns,tasks,selectedBoard,boards} = useData();
   const [boardTasks, setBoardTasks] = useState<any>(null);
   const [boardColumns, setBoardColumns] = useState<any>([]);
   const navigate = useNavigate();
@@ -42,7 +43,6 @@ export default function Home(){
   useEffect(()=>{
     setBoardColumns(columns.filter((column:any)=>column.boardId === boardId.board));
     setBoardTasks(tasks.filter((task:any)=>task.board === boardId.board));
-		console.log(columns)
   },[columns,boardId,tasks])
 
   return(
@@ -86,7 +86,11 @@ export default function Home(){
                   }
               </div>
               ))} 
+              <div className="addColumn" onClick={()=>setEditBoardModal(true)}>
+                <span>+ New Column</span>
+              </div>
             </div>
+            
           </div>
         }
         {editBoardModal && <EditBoardModal />}
@@ -95,6 +99,7 @@ export default function Home(){
         {addNewBoardModal && <AddNewBoardModal />}
         {deleteTaskModal && <DeleteTaskModal />}
         {editTaskModal && <EditTaskModal />}
+        {deleteBoardModal && <DeleteBoardModal />}
     </Wrapper>
   )
 }
@@ -108,8 +113,8 @@ const Wrapper = styled.div`
   .columns{
     max-width: 98vw;
     width: fit-content;
-    height: 82vh;
-     overflow: scroll;
+    height: 86vh;
+    overflow: scroll;
     margin: 20px auto;
     .container{
       display: flex;
@@ -117,6 +122,7 @@ const Wrapper = styled.div`
       width: fit-content;
       max-width: 1000vw;
       height: 100%;
+      padding-right: 20px;
       .column{
         width: 17em;
         height: 100%;
@@ -144,6 +150,19 @@ const Wrapper = styled.div`
           font-weight: 200;
           margin-top: 10px;
           }
+        }
+      }
+      .addColumn{
+        width: 17em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(to bottom, #0001,#0002);
+        border-radius: 5px;
+        span{
+          color: #AFB6B9;
+          font-size: 22px;
+          font-weight: 600;
         }
       }
     }

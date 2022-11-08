@@ -47,19 +47,21 @@ export default function EditBoardModal(props : any){
     }
     const saveChanges = (e:any) =>{
         e.preventDefault()
-        console.log(board.board)
         modalColumns.forEach((column:any)=>{
             if(column.name.length <= 0){
                 alert('name cant be empty')
                 return
             }setEditBoardModal(false)
-            setColumns([...modalColumns,...columns])
+            const testx = columns.filter((column:any)=>column.boardId !== board.board);
+            const xd = modalColumns
+            setColumns([...xd,...testx]);
+            console.log(columns)
             setAutoFocus(false)
         })
         
     }
     useEffect(()=>{
-        setModalColumns(columns.filter((column:any)=>column.boardId === board))
+        setModalColumns(columns.filter((column:any)=>column.boardId === board.board))
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 

@@ -1,28 +1,35 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components"
 import { useData } from "../context/dataContext";
 import { useModals } from "../context/modalsContext"
 
-export default function DeleteTaskModal(){
+export default function DeleteBoardModal(){
 
-    const {setDeleteTaskModal,selectedTask} = useModals();
-    const {tasks,setTasks} = useData();
-    
-    const deleteTask = (e:any) =>{
-        e.preventDefault()
-        const tasksAct = tasks.filter((task:any)=>task.id !== selectedTask.id);
+    const {setDeleteBoardModal} = useModals();
+    const {selectedBoard,setBoards,boards,columns,setColumns,tasks,setTasks,setSelectedBoard} = useData();
+    const navigate = useNavigate();
+
+    const deleteBoard = (e:any)=>{
+        e.preventDefault();
+        const boardAct = boards.filter((board:any)=>board.id !== selectedBoard.id);
+        setBoards(boardAct);
+        const columnsAct = columns.filter((column:any)=>column.boardId !== selectedBoard.id);
+        setColumns(columnsAct);
+        const tasksAct = tasks.filter((task:any)=>task.board !== selectedBoard.id);
         setTasks(tasksAct);
-        setDeleteTaskModal(false)
+        navigate(`/${boards[0].id}`);
+        setSelectedBoard(boards[0])
     }
 
     return(
         <Wrapper>
             <div className="modal">
-                <h1>Delete this task?</h1>
-                <p>Are you sure you want to delete the ‘Build settings UI’ task and its subtasks? This action cannot be reversed.</p>
-                <button className="deleteBtn" onClick={e=>deleteTask(e)}>Delete</button>
-                <button className="cancelBtn" onClick={()=>setDeleteTaskModal(false)} >Cancel</button>
+                <h1>Delete this board?</h1>
+                <p>Are you sure you want to delete the {selectedBoard.name} board? This action will remove all columns and tasks and cannot be reversed.</p>
+                <button className="deleteBtn" onClick={e=>deleteBoard(e)}>Delete</button>
+                <button className="cancelBtn" onClick={()=>setDeleteBoardModal(false)} >Cancel</button>
             </div>
-            <div className="bg" onClick={()=>setDeleteTaskModal(false)} ></div>
+            <div className="bg" onClick={()=>setDeleteBoardModal(false)} ></div>
         </Wrapper>
     )
 }
