@@ -6,7 +6,7 @@ import { useModals } from '../context/modalsContext';
 
 export default function NavBar(){
 
-    const {setAddNewTaskModal,setAddNewBoardModal,setDeleteBoardModal} = useModals();
+    const {setAddNewTaskModal,setAddNewBoardModal,setDeleteBoardModal,setEditBoardModal} = useModals();
     const {boards, selectedBoard, setSelectedBoard, columns} = useData();
     const [burgerMenuState, setBurgerMenuState] = useState<null | string>(null);
     const [boardColumns, setBoardColumns] = useState<any>([]);
@@ -25,6 +25,10 @@ export default function NavBar(){
         setSelectedBoard(board);
         navigate(`/${board.id}`);
         burgerMenuHandler()
+    }
+    const xd = (dx:any)=>{
+        dx(true);
+        setBoardOptions(false)
     }
     useEffect(()=>{
         setBoardColumns(columns.filter((column:any)=>column.boardId === board.board))
@@ -95,8 +99,8 @@ export default function NavBar(){
             </div>
             {boardOptions && 
             <div className="boardOptions">
-                <span className='editBoard'>Edit Board</span>
-                <span className='deleteBoard' onClick={()=>setDeleteBoardModal(true)} >Delete Board</span>
+                <span className='editBoard' onClick={()=>xd(setEditBoardModal)}>Edit Board</span>
+                <span className='deleteBoard' onClick={()=>xd(setDeleteBoardModal)} >Delete Board</span>
             </div>}
         </Wrapper>
     )

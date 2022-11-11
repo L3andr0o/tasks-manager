@@ -1,4 +1,5 @@
 import { uuidv4 } from "@firebase/util";
+import { spawn } from "child_process";
 import { useState } from "react"
 import { useParams } from "react-router-dom";
 import styled from "styled-components"
@@ -9,8 +10,8 @@ export default function AddNewTaskModal(){
 
     const {setAddNewTaskModal} = useModals();
     const {columns,tasks,setTasks,selectedBoard} = useData();
-    const board = useParams();
-    const [selectedColumn, setSelectedColumn] = useState<any>(columns[0].name);
+    const board = useParams().board;
+    const [selectedColumn, setSelectedColumn] = useState<any>(columns[0]);
     const [subtasks, setSubtasks] = useState<any>([
         {content:'',
         id:uuidv4(),
@@ -21,7 +22,17 @@ export default function AddNewTaskModal(){
         }]);
     const [newTask, setNewTask] = useState({title:'',description:''})
     const handleChange = ({target : {name, value}}:any) =>setNewTask({...newTask, [name]: value});
-
+    const [error,setError] = useState<any>([]);
+    const catchError = (e:any,id:any) =>{
+        const validation = error.find((err:any) => err === id)
+        if(e.target.value.length === 0 && validation !== id){
+            e.target.classList.add('red');
+            setError([id,...error]);
+            return
+        }e.target.classList.remove('red');
+        const errAct = error.filter((err:any)=>err !== id)
+        setError([...errAct])
+    }
 
     const addNewSubtask = (e:any,subtask:any)=>{
         e.preventDefault();
@@ -42,11 +53,15 @@ export default function AddNewTaskModal(){
         })
         setSubtasks(subtasksAct)
     }
+
+
     const [selectState, setSelectState] = useState<string | null>(null);
-    const selectHandler =  ()=>{
-        (selectState === 'active') ? setSelectState('hidden') : setSelectState('active')
-        console.log('hola')
-    };
+    const selectHandler =  ()=>(selectState === 'active') ? setSelectState('hidden') : setSelectState('active');
+    const selectOptionHandler = (column:any) =>{
+        setSelectState('hidden');
+        setSelectedColumn(column)
+    }
+
     const createTask = (e:any)=>{
         e.preventDefault()
         const task : any= {
@@ -54,7 +69,7 @@ export default function AddNewTaskModal(){
             title:newTask.title,
             description:newTask.description,
             subtasks: subtasks,
-            column:selectedColumn,
+            column:selectedColumn.id,
             board:selectedBoard.id
         }
         setTasks([...tasks,task]);
@@ -62,16 +77,26 @@ export default function AddNewTaskModal(){
         setAddNewTaskModal(false)
     }
 
-
     return(
         <Wrapper >
             <div className="modal">
                 <h1>Add New Task</h1>
                 <form>
                     <label htmlFor="task">Title</label>
-                    <input type="text" placeholder="e.g. Take coffee break" id="title" name="title" onChange={handleChange}/>
+                    <div>
+                        <input type="text" placeholder="e.g. Take coffee break" id="title" name="title" onChange={handleChange} onBlur={e=>catchError(e,'title')}/>
+                        {error && error.map((err:any)=>(
+                        err === 'title' && 
+                        <i key={err}>Can't be empty</i>
+                        ))}
+                    </div>
                     <label htmlFor="description">Description</label>
-                    <input type="text" placeholder="e.g. It’s always good to take a break. This 15 minute break will  recharge the batteries a little." id="description" name="description" onChange={handleChange} />
+                    <div>
+                        <input type="text" placeholder="e.g. It’s always good to take a break. This 15 minute break will  recharge the batteries a little." id="description" name="description" onChange={handleChange} onBlur={(e)=>catchError(e,'description')} />
+                        {error && error.map((err:any)=>(
+                            err === 'description' && <i key={err}>Can't be empty</i>
+                        ))}
+                    </div>
                     <div className="subtasks">
                         <span>Subtasks</span>
                         {
@@ -88,16 +113,16 @@ export default function AddNewTaskModal(){
                         </button>
                     </div>
                     <div className='select'>
-                        <span>Status</span>
-                        <div className='selected-option' onClick={()=>selectHandler()}>
-                            <span>{selectedColumn}</span>
+                        <span className="status">Status</span>
+                        <div className={`selected-option ${selectState!}`} onClick={()=>selectHandler()}>
+                            <span>{selectedColumn.name}</span>
                             <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg"><path stroke="#635FC7" strokeWidth="2" fill="none" d="m1 1 4 4 4-4"/></svg>
                         </div>
                         <ul className={selectState!}>
                             {columns.map((column:any)=>(
-                                column.boardId === board.board &&  
-                                <li key={column.id} onClick={()=>setSelectedColumn(column.name)} 
-                                className={`${column.name === selectedColumn}`}>{column.name}</li>
+                                column.boardId === board &&  
+                                <li key={column.id} onClick={()=>selectOptionHandler(column)} 
+                                className={`${column.id === selectedColumn.id} opt`}>{column.name}</li>
                             ))}
                         </ul>
                     </div>
@@ -140,6 +165,7 @@ const Wrapper = styled.div`
         @keyframes show {
             100%{transform:scale(1)}
         }
+        
         input{
             background-color: transparent;
             border: 1px solid #ffffff28;
@@ -147,7 +173,21 @@ const Wrapper = styled.div`
             border-radius: 5px;
             padding: 10px;
             width: 100%;
+            &.red{
+                border: 1px solid #f00;
+            }
         }
+        div{
+            position: relative;
+            i{
+            position: absolute;
+            top: calc(50% - 6px);
+            color: #f00;
+            right: 10px;
+            font-size: 12px;
+        }
+        }
+        
         h1{
             font-size: 18px;
             font-weight: 500;
@@ -160,6 +200,7 @@ const Wrapper = styled.div`
             margin-bottom: 5px;
             margin-top: 15px;
         }
+       
         button{
             width: 100%;
             padding: 10px;
@@ -190,6 +231,7 @@ const Wrapper = styled.div`
         }
         .select{
             width: 100%;
+            position: relative;
             .selected-option{
                 display: flex;
                 justify-content: space-between;
@@ -201,6 +243,9 @@ const Wrapper = styled.div`
                 width: 100%;
                 height: fit-content;
                 padding: 10px;
+                &.active{
+                    border: 1px solid #635fc7;
+                }
                 span{
                     margin: 0;
                 }
@@ -209,6 +254,10 @@ const Wrapper = styled.div`
                 border-radius: 5px;
                 overflow: hidden;
                 display: none;
+                position: absolute;
+                width: 100%;
+                background-color: #20212C;
+                top: 115%;
                 &.active{
                     display: block;
                 }
@@ -217,11 +266,14 @@ const Wrapper = styled.div`
                 }
                 li{
                     padding: 10px;
-                    border: 1px solid #ffffff28;
                     font-size: 12px;
                     font-weight: 600;
+                    color: #828FA3;
                     &.true{
-                        background-color: #3e3f4b;
+                    background-color: #0c0c33;
+                    }
+                    &:hover{
+                    border: 1px solid #635fc7;
                     }
                 }
             }

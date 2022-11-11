@@ -67,13 +67,13 @@ export default function Home(){
                 <h1>
                   {column.name} 
                   <span>
-                    ( {tasks.filter((task:any)=>task.column === column.name).length} )
+                    ( {tasks.filter((task:any)=>task.column === column.id).length} )
                   </span>
                 </h1>
                   {
                   // eslint-disable-next-line array-callback-return
                   boardTasks && boardTasks.map((task:any)=>{
-                    if(task.column === column.name && task.board === boardId.board){
+                    if(task.column === column.id && task.board === boardId.board){
                       return(
                         <div key={task.id} className='task' onClick={()=>showTask(task)}>
                           <h1>{task.title}</h1>
