@@ -1,5 +1,4 @@
 import { uuidv4 } from "@firebase/util";
-import { spawn } from "child_process";
 import { useState } from "react"
 import { useParams } from "react-router-dom";
 import styled from "styled-components"
@@ -24,14 +23,17 @@ export default function AddNewTaskModal(){
     const handleChange = ({target : {name, value}}:any) =>setNewTask({...newTask, [name]: value});
     const [error,setError] = useState<any>([]);
     const catchError = (e:any,id:any) =>{
-        const validation = error.find((err:any) => err === id)
-        if(e.target.value.length === 0 && validation !== id){
+        const validation = error.map((err:any) => err === id)
+        if(!validation[0]){
+            if(e.target.value.length === 0){
             e.target.classList.add('red');
             setError([id,...error]);
+            }
             return
         }e.target.classList.remove('red');
         const errAct = error.filter((err:any)=>err !== id)
         setError([...errAct])
+        console.log(error)
     }
 
     const addNewSubtask = (e:any,subtask:any)=>{
@@ -64,6 +66,10 @@ export default function AddNewTaskModal(){
 
     const createTask = (e:any)=>{
         e.preventDefault()
+       if(
+        newTask.title.length > 0 &&
+        newTask.description.length > 0
+        ){  
         const task : any= {
             id:uuidv4(),
             title:newTask.title,
@@ -73,8 +79,9 @@ export default function AddNewTaskModal(){
             board:selectedBoard.id
         }
         setTasks([...tasks,task]);
-        console.log(tasks);
         setAddNewTaskModal(false)
+        return
+       }alert(`Can't be empty fields`)
     }
 
     return(
@@ -92,7 +99,7 @@ export default function AddNewTaskModal(){
                     </div>
                     <label htmlFor="description">Description</label>
                     <div>
-                        <input type="text" placeholder="e.g. It’s always good to take a break. This 15 minute break will  recharge the batteries a little." id="description" name="description" onChange={handleChange} onBlur={(e)=>catchError(e,'description')} />
+                        <input type="text" placeholder="e.g. It’s always good to take a break. This 15 minute break will  recharge the batteries a little." id="description" name="description" onChange={handleChange} onBlur={(e)=>catchError(e,'description')}/>
                         {error && error.map((err:any)=>(
                             err === 'description' && <i key={err}>Can't be empty</i>
                         ))}
@@ -100,9 +107,14 @@ export default function AddNewTaskModal(){
                     <div className="subtasks">
                         <span>Subtasks</span>
                         {
+                            subtasks.length > 0 && 
                             subtasks.map((subtask:any)=>(
                                 <div key={subtask.id}>
-                                    <input type="text" placeholder={subtask.placeholder!} onChange={e=>actSubtask(e,subtask.id)} />
+                                    <input type="text" placeholder={subtask.placeholder!} onChange={e=>actSubtask(e,subtask.id)} onBlur={e=>catchError(e,subtask.id)}/>
+                                    {error && error.map((err:any)=>(
+                                        err === subtask.id && 
+                                        <i key={err}>Can't be empty</i>
+                                        ))}
                                     <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg" onClick={()=>deleteSubtask(subtask.id)}><g fill="#828FA3" fillRule="evenodd"><path d="m12.728 0 2.122 2.122L2.122 14.85 0 12.728z"/><path d="M0 2.122 2.122 0 14.85 12.728l-2.122 2.122z"/></g></svg>
                                 </div>
                             ))
@@ -173,6 +185,10 @@ const Wrapper = styled.div`
             border-radius: 5px;
             padding: 10px;
             width: 100%;
+            outline: none;
+            &:focus{
+                border: 1px solid #635fc7;
+            }
             &.red{
                 border: 1px solid #f00;
             }
@@ -222,6 +238,9 @@ const Wrapper = styled.div`
                 margin-bottom: 10px;
                 input{
                     width: 90%;
+                }
+                i{
+                    right: calc(10% + 10px);
                 }
             }
             .subtasks-btn{

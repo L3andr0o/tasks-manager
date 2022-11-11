@@ -8,7 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 export default function IndvTask(){
 
 
-  const {columns,tasks} = useData();
+  const {columns} = useData();
   const {setTaskState, selectedTask,setDeleteTaskModal,setEditTaskModal} = useModals()
   const [selectedColumn, setSelectedColumn] = useState<any>();
   const [selectState, setSelectState] = useState<string | null>(null);
@@ -20,10 +20,14 @@ export default function IndvTask(){
   const closeModal = () =>{
     setTaskState(false);
     navigate(`/${board.board}`);
-    selectedTask.column = selectedColumn
+    selectedTask.column = selectedColumn.id
   }
 
   const selectHandler =  ()=> (selectState === 'active') ? setSelectState('hidden') : setSelectState('active');
+  const selectOptionHandler = (column:any) =>{
+    setSelectState('hidden');
+    setSelectedColumn(column)
+}
   const menuHandler = ()=> menuState ? setMenuState(false) : setMenuState(true);
   const deleteModalHandler = () =>{
     setDeleteTaskModal(true);
@@ -36,7 +40,6 @@ export default function IndvTask(){
 
   const actSubtaskState = (e:any,subtask : any) =>{
     subtask.completed = e.target.checked;
-    console.log(tasks)
   }
   useEffect(()=>{
     setBoardColumns(columns.filter((column:any)=>column.boardId === board.board));
@@ -45,10 +48,10 @@ export default function IndvTask(){
   useEffect(()=>{
     // eslint-disable-next-line array-callback-return
     boardColumns.map((column:any)=>{
-      if(column.name === selectedTask.column){
-        setSelectedColumn(column.name);
+      if(column.id === selectedTask.column){
+        setSelectedColumn(column);
         return column
-      }else{ console.log('xd')}
+      }
     })
   },[boardColumns,selectedTask])
 
@@ -80,13 +83,18 @@ export default function IndvTask(){
           <div className='select'>
             <span>Status</span>
             <div className='selected-option' onClick={selectHandler}>
-              {(columns.length > 0) && <span>{selectedColumn}</span>}
+              {(selectedColumn) && <span>{selectedColumn.name}</span>}
               <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg"><path stroke="#635FC7" strokeWidth="2" fill="none" d="m1 1 4 4 4-4"/></svg>
             </div>
             <ul className={selectState!}>
-              {(columns.length > 0) &&
-                columns.map((column:any)=>(
-                  <li key={column.id} onClick={()=>setSelectedColumn(column.name)}>{column.name}</li>
+              {(boardColumns.length > 0) &&
+                boardColumns.map((column:any)=>(
+                  <li 
+                  key={column.id} 
+                  onClick={()=>selectOptionHandler(column)} 
+                  className={`${selectedColumn && column.id === selectedColumn.id} opt`}>
+                    {column.name}
+                  </li>
                 ))
               }
             </ul>
@@ -209,6 +217,7 @@ const Wrapper = styled.div`
         .select{
           width: 100%;
           margin-top: 10px;
+          position: relative;
           .selected-option{
             display: flex;
             justify-content: space-between;
@@ -229,6 +238,10 @@ const Wrapper = styled.div`
             border-radius: 5px;
             overflow: hidden;
             display: none;
+            position: absolute;
+            width: 100%;
+            background-color: #20212C;
+            top: 115%;
             &.active{
               display: block;
             }
@@ -237,9 +250,15 @@ const Wrapper = styled.div`
             }
             li{
               padding: 10px;
-              border: 1px solid #ffffff28;
               font-size: 12px;
               font-weight: 600;
+              color: #828FA3;
+              &.true{
+              background-color: #0c0c33;
+              }
+              &:hover{
+              border: 1px solid #635fc7;
+              }
             }
           }
         }
