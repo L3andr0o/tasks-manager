@@ -57,7 +57,7 @@ const Wrapper = styled.div`
         position: absolute;
         left: 0;
         top: 0;
-        z-index: 250;
+        z-index: 100;
         background-color:#0003;
     }
     .modal{
@@ -68,7 +68,7 @@ const Wrapper = styled.div`
         max-width: 25em;
         animation: show .3s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0s 1 normal forwards;
         transform: scale(0);
-        z-index: 300;
+        z-index: 200;
         h1{
             color: #EA5555;
             font-size: 18px;

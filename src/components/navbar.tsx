@@ -84,13 +84,13 @@ export default function NavBar(){
                 <div className='sidebar-bottom'>
                     <div className='theme-changer'>
                         <svg width="19" height="19" xmlns="http://www.w3.org/2000/svg"><path d="M9.167 15.833a.833.833 0 0 1 .833.834v.833a.833.833 0 0 1-1.667 0v-.833a.833.833 0 0 1 .834-.834ZM3.75 13.75a.833.833 0 0 1 .59 1.422l-1.25 1.25a.833.833 0 0 1-1.18-1.178l1.25-1.25a.833.833 0 0 1 .59-.244Zm10.833 0c.221 0 .433.088.59.244l1.25 1.25a.833.833 0 0 1-1.179 1.178l-1.25-1.25a.833.833 0 0 1 .59-1.422ZM9.167 5a4.167 4.167 0 1 1 0 8.334 4.167 4.167 0 0 1 0-8.334Zm-7.5 3.333a.833.833 0 0 1 0 1.667H.833a.833.833 0 1 1 0-1.667h.834Zm15.833 0a.833.833 0 0 1 0 1.667h-.833a.833.833 0 0 1 0-1.667h.833Zm-1.667-6.666a.833.833 0 0 1 .59 1.422l-1.25 1.25a.833.833 0 1 1-1.179-1.178l1.25-1.25a.833.833 0 0 1 .59-.244Zm-13.333 0c.221 0 .433.088.59.244l1.25 1.25a.833.833 0 0 1-1.18 1.178L1.91 3.09a.833.833 0 0 1 .59-1.422ZM9.167 0A.833.833 0 0 1 10 .833v.834a.833.833 0 1 1-1.667 0V.833A.833.833 0 0 1 9.167 0Z" fill="#828FA3"/></svg>
-                            <div className="toggle">
-                                <div onClick={themeHandler} className={`${choose}`}></div>
+                            <div className="toggle" onClick={themeHandler} >
+                                <div className={`${choose}`}></div>
                             </div>
                         <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg"><path d="M6.474.682c.434-.11.718.406.481.78A6.067 6.067 0 0 0 6.01 4.72c0 3.418 2.827 6.187 6.314 6.187.89.002 1.77-.182 2.584-.54.408-.18.894.165.724.57-1.16 2.775-3.944 4.73-7.194 4.73-4.292 0-7.771-3.41-7.771-7.615 0-3.541 2.466-6.518 5.807-7.37Zm8.433.07c.442-.294.969.232.674.674l-.525.787a1.943 1.943 0 0 0 0 2.157l.525.788c.295.441-.232.968-.674.673l-.787-.525a1.943 1.943 0 0 0-2.157 0l-.786.525c-.442.295-.97-.232-.675-.673l.525-.788a1.943 1.943 0 0 0 0-2.157l-.525-.787c-.295-.442.232-.968.674-.673l.787.525a1.943 1.943 0 0 0 2.157 0Z" fill="#828FA3"/></svg>
                     </div>
                     <div className="hidde-sidebar-btn" onClick={()=> setBurgerMenuState('hidden')}>
-                        <svg width="18" height="16" xmlns="http://www.w3.org/2000/svg"><path d="M8.522 11.223a4.252 4.252 0 0 1-3.654-5.22l3.654 5.22ZM9 12.25A8.685 8.685 0 0 1 1.5 8a8.612 8.612 0 0 1 2.76-2.864l-.86-1.23A10.112 10.112 0 0 0 .208 7.238a1.5 1.5 0 0 0 0 1.524A10.187 10.187 0 0 0 9 13.75c.414 0 .828-.025 1.239-.074l-1-1.43A8.88 8.88 0 0 1 9 12.25Zm8.792-3.488a10.14 10.14 0 0 1-4.486 4.046l1.504 2.148a.375.375 0 0 1-.092.523l-.648.453a.375.375 0 0 1-.523-.092L3.19 1.044A.375.375 0 0 1 3.282.52L3.93.068a.375.375 0 0 1 .523.092l1.735 2.479A10.308 10.308 0 0 1 9 2.25c3.746 0 7.031 2 8.792 4.988a1.5 1.5 0 0 1 0 1.524ZM16.5 8a8.674 8.674 0 0 0-6.755-4.219A1.75 1.75 0 1 0 12.75 5v-.001a4.25 4.25 0 0 1-1.154 5.366l.834 1.192A8.641 8.641 0 0 0 16.5 8Z" fill="#828FA3"/></svg>
+                        <svg width="18" height="16" xmlns="http://www.w3.org/2000/svg"><path d="M8.522 11.223a4.252 4.252 0 0 1-3.654-5.22l3.654 5.22ZM9 12.25A8.685 8.685 0 0 1 1.5 8a8.612 8.612 0 0 1 2.76-2.864l-.86-1.23A10.112 10.112 0 0 0 .208 7.238a1.5 1.5 0 0 0 0 1.524A10.187 10.187 0 0 0 9 13.75c.414 0 .828-.025 1.239-.074l-1-1.43A8.88 8.88 0 0 1 9 12.25Zm8.792-3.488a10.14 10.14 0 0 1-4.486 4.046l1.504 2.148a.375.375 0 0 1-.092.523l-.648.453a.375.375 0 0 1-.523-.092L3.19 1.044A.375.375 0 0 1 3.282.52L3.93.068a.375.375 0 0 1 .523.092l1.735 2.479A10.308 10.308 0 0 1 9 2.25c3.746 0 7.031 2 8.792 4.988a1.5 1.5 0 0 1 0 1.524ZM16.5 8a8.674 8.674 0 0 0-6.755-4.219A1.75 1.75 0 1 0 12.75 5v-.001a4.25 4.25 0 0 1-1.154 5.366l.834 1.192A8.641 8.641 0 0 0 16.5 8Z" /></svg>
                         <span>Hide Sidebar</span>
                     </div>
                 </div>
@@ -127,12 +127,16 @@ const Wrapper = styled.div`
         position: absolute;
         left: 0;
         top: 92vh;
-        z-index: 200;
+        z-index: 20;
         background-color:${({theme})=>theme.primaryColor};
         width: 3em;
         padding: 10px 0;
         text-align: center;
         border-radius: 0 20px 20px 0;
+        cursor: pointer;
+        &:hover{
+            background-color: #A8A4FF;
+        }
         &.null{
             display: none;
         }
@@ -167,7 +171,7 @@ const Wrapper = styled.div`
                 @media (min-width: 768px) {
                     display: block;
                     margin-left: 10px;
-                    color: #fff;
+                    color: ${({theme})=>theme.font2};
                 }
             }
         }
@@ -294,7 +298,7 @@ const Wrapper = styled.div`
         left: 10%;
         border-radius: 5px;
         padding: 15px 0px;
-        z-index: 200;
+        z-index: 80;
         .content{
             height: fit-content;
             align-items: flex-start;
@@ -310,7 +314,7 @@ const Wrapper = styled.div`
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            padding: 15px;
+            /* padding: 15px; */
             padding-bottom: 30px;
             .content{
                 margin-top: 100px;
@@ -366,14 +370,22 @@ const Wrapper = styled.div`
             margin: 10px 0;
             width: 100%;
             li{
-                color: #fff;
+                color: ${({theme})=>theme.font};
                 padding: 10px 0;
                 text-align: left;
                 width: 90%;
                 position: relative;
                 padding-left: 15px;
                 font-weight: 600;
+                border-radius: 0 25px 25px 0;
+                cursor: pointer;
+                &:hover:not(.selectedBoard){
+                    background-color: ${({theme})=>theme.darkBg};
+                    color: ${({theme})=>theme.primaryColor};
+                    svg{path{fill: ${({theme})=>theme.primaryColor};}}
+                }
                &.selectedBoard{
+                color: #fff;
                 &::after{
                     content: '';
                     position: absolute;
@@ -385,11 +397,16 @@ const Wrapper = styled.div`
                     z-index: -1;
                     border-radius: 0 25px 25px 0;
                 }
+                svg{
+                    path{
+                        fill: #fff;
+                    }
+                }
                }
                 svg{
                     margin-right: 8px;
                     path{
-                        fill: #fff;
+                        fill: ${({theme})=>theme.font};
                     }
                 }
             }
@@ -398,6 +415,7 @@ const Wrapper = styled.div`
             color: ${({theme})=>theme.primaryColor};
             margin: 0 15px;
             font-weight: 600;
+            cursor: pointer;
             svg{
                 margin-right: 8px;
                 path{
@@ -423,11 +441,14 @@ const Wrapper = styled.div`
                 border-radius: 15px;
                 height: 20px;
                 padding: 2px 4px;
+                cursor: pointer;
+                &:hover{background-color: #A8A4FF;}
                 div{
                     height: 100%;
                     width: 50%;
                     background-color: #fff;
                     border-radius: 50%;
+                    &:hover{background-color: #fff;}
                     &.false{
                         animation: trs .3s ease-in 0s 1 normal forwards;
                         @keyframes trs {100%{transform:translateX(100%);}}
@@ -447,11 +468,21 @@ const Wrapper = styled.div`
                 @media (min-width: 768px) {
                     display: block;
                     margin-top: 20px;
+                    font-weight: 600;
+                    padding: 10px;
+                    border-radius: 5px;
+                    cursor: pointer;
                 svg{
                     margin-right: 10px;
+                    fill: #828FA3;
                 }
                 span{
                     color: ${({theme})=>theme.font};
+                }
+                &:hover{
+                    background-color: ${({theme})=>theme.darkBg};
+                    span{color: ${({theme})=>theme.primaryColor};}
+                    svg{fill: ${({theme})=>theme.primaryColor};}
                 }
                 }
             }

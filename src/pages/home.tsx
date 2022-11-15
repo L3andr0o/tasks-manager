@@ -118,6 +118,10 @@ const Wrapper = styled.div`
     height: 86vh;
     overflow: scroll;
     margin: 20px auto;
+    @media (min-width:768px) {
+      overflow: auto;
+      margin: 20px;
+    }
     .container{
       display: flex;
       overflow: scroll;
@@ -125,6 +129,10 @@ const Wrapper = styled.div`
       max-width: 1000vw;
       height: 100%;
       padding-right: 20px;
+      @media (min-width:768px) {
+        overflow: auto;
+        width: fit-content;
+      }
       .column{
         width: 17em;
         height: 100%;
@@ -196,6 +204,11 @@ const Wrapper = styled.div`
         font-size: 16px;
         font-weight: 600;
         margin-top: 15px;
+        cursor: pointer;
+        transition: background-color .3s cubic-bezier(0.165, 0.84, 0.44, 1);
+        &:hover{
+          background-color: #A8A4FF;
+        }
       }
     }
   }
