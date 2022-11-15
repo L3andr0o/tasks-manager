@@ -4,6 +4,7 @@ import {useState, useEffect} from 'react';
 import { uuidv4 } from '@firebase/util';
 import { useData } from '../context/dataContext';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../context/themeContext';
 
 export default function AddNewBoardModal(){
 
@@ -53,9 +54,10 @@ export default function AddNewBoardModal(){
       setBoardId(uuidv4())
     },[])
 
+    const {theme} = useTheme();
 
     return(
-        <Wrapper>
+        <Wrapper theme={theme}>
         <div className="modal">
             <h1>Edit Board</h1>
             <label htmlFor="board-name">Board Name</label>
@@ -103,7 +105,7 @@ const Wrapper = styled.div`
     }
     .modal{
         width: 90%;
-        background-color: #2b2c37;
+        background-color: ${({theme})=>theme.bg};
         padding: 25px 20px;
         color: #fff;
         border-radius: 5px;
@@ -116,27 +118,28 @@ const Wrapper = styled.div`
         }
         input{
             background-color: transparent;
-            border: 1px solid #ffffff28;
-            color: #fff;
+            border: 1px solid #828FA3;
+            color: ${({theme})=>theme.font2};
             border-radius: 5px;
             padding: 10px;
             outline: none;
             transition: background-color .3s cubic-bezier(0.165, 0.84, 0.44, 1);
             &:focus{
-            background-color: #757575;
+            background-color: ${({theme})=>theme.darkBg};
             }
         }
         h1{
             font-size: 18px;
             font-weight: 500;
             margin-bottom: 15px;
+            color: ${({theme})=>theme.font2};
         }
         label{
             display: block;
             font-size: 12px;
             font-weight: 600;
             margin-bottom: 5px;
-            
+            color: ${({theme})=>theme.font2};
         }
         #board-name{
             width: 100%;
@@ -146,6 +149,7 @@ const Wrapper = styled.div`
             span{
                 font-size: 12px;
                 font-weight: 600;
+                color: ${({theme})=>theme.font2};
             }
             div{
                 margin-top: 10px;
@@ -169,7 +173,7 @@ const Wrapper = styled.div`
                     font-weight: 600;
                 }
                 .add-new-column{
-                    background-color: #fff;
+                    background: (#635FC7,#fff);
                     color: #635fc7;
                     
                 }

@@ -3,6 +3,7 @@ import {useState,useEffect} from 'react';
 import { useData } from "../context/dataContext";
 import { useModals } from "../context/modalsContext";
 import { useNavigate, useParams } from "react-router-dom";
+import { useTheme } from "../context/themeContext";
 
 
 export default function IndvTask(){
@@ -55,8 +56,10 @@ export default function IndvTask(){
     })
   },[boardColumns,selectedTask])
 
+  const {theme} = useTheme();
+
   return(
-    <Wrapper>
+    <Wrapper theme={theme}>
       {selectedTask &&
         <div className="modal" key={selectedTask.id}>
           <div className="top">
@@ -82,7 +85,7 @@ export default function IndvTask(){
           </div>
           <div className='select'>
             <span>Status</span>
-            <div className='selected-option' onClick={selectHandler}>
+            <div className={`selected-option ${selectState}`} onClick={selectHandler}>
               {(selectedColumn) && <span>{selectedColumn.name}</span>}
               <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg"><path stroke="#635FC7" strokeWidth="2" fill="none" d="m1 1 4 4 4-4"/></svg>
             </div>
@@ -125,9 +128,9 @@ const Wrapper = styled.div`
     }
     .modal{
       width: 90%;
-      background-color: #2b2c37;
+      background-color: ${({theme})=>theme.bg};
       padding: 25px 20px;
-      color: #fff;
+      color: ${({theme})=>theme.font2};
       border-radius: 5px;
       max-width: 25em;
       animation: show .3s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0s 1 normal forwards;
@@ -147,6 +150,8 @@ const Wrapper = styled.div`
       span{
         font-size: 12px;
         margin-top: 20px;
+        color: #828FA3;
+        font-weight: 700;
       }
       .top{
         display: flex;
@@ -164,7 +169,7 @@ const Wrapper = styled.div`
           bottom: -100px;
           display: flex;
           flex-direction: column;
-          background-color: #20212C;
+          background-color: ${({theme})=>theme.bg};
           width: 8em;
           padding: 10px;
           justify-content: space-around;
@@ -190,7 +195,7 @@ const Wrapper = styled.div`
         .subtask{
           display: flex;
           align-items: center;
-          background-color: #20212C;
+          background-color: ${({theme})=>theme.darkBg};
           padding: 15px;
           font-size: 12px;
           border-radius: 5px;
@@ -198,18 +203,17 @@ const Wrapper = styled.div`
           label{
             margin-left: 10px;
             width: 100%;
+            color: #828FA3;
+            font-weight: 600;
           }
           input[type='checkbox']{
             transform: scale(1.2);
             &:checked{
             accent-color: #635FC7;
             }
-            &:focus{
-            accent-color: #837fda;
-            }
             &:checked + label{
               text-decoration: line-through;
-               color: #828FA3;
+              color: #828FA3;
             }
           }
         }
@@ -223,13 +227,16 @@ const Wrapper = styled.div`
             justify-content: space-between;
             align-items: center;
             background-color: transparent;
-            border: 1px solid #ffffff28;
-            color: #fff;
+            border: 1px solid #828FA3;
+            color: ${({theme})=>theme.font2};
             border-radius: 5px;
             width: 100%;
             height: fit-content;
             padding: 10px;
             margin-top: 5px;
+            &.active{
+              border: 1px solid #635fc7;
+            }
             span{
               margin: 0;
             }
@@ -240,7 +247,7 @@ const Wrapper = styled.div`
             display: none;
             position: absolute;
             width: 100%;
-            background-color: #20212C;
+            background-color: ${({theme})=>theme.bg};
             top: 115%;
             &.active{
               display: block;
@@ -254,7 +261,7 @@ const Wrapper = styled.div`
               font-weight: 600;
               color: #828FA3;
               &.true{
-              background-color: #0c0c33;
+              background-color: ${({theme})=>theme.darkBg};
               }
               &:hover{
               border: 1px solid #635fc7;

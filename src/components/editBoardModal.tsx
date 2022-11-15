@@ -4,14 +4,16 @@ import { v4 as uuidv4 } from 'uuid';
 import { useData } from "../context/dataContext";
 import {useState, useEffect} from 'react';
 import { useParams } from "react-router-dom";
+import { useTheme } from "../context/themeContext";
 
 export default function EditBoardModal(props : any){
 
     const {setEditBoardModal} = useModals();
-    const {columns, setColumns,boards,setBoards,selectedBoard} = useData();
+    const {columns, setColumns,tasks,setTasks,selectedBoard} = useData();
     const [modalColumns,setModalColumns] = useState<any>([]);
     const [autoFocus, setAutoFocus] = useState<boolean>(false);
-    const [error,setError] = useState<any>([]);
+    const [boardName,setBoardName] = useState<any>();
+    const [falseTasks, setFalseTasks] = useState<any>();
 
     const board = useParams().board;
 
@@ -23,8 +25,10 @@ export default function EditBoardModal(props : any){
         setAutoFocus(true)
     };
     const deleteColumn = (id:any)=>{
-        const columnsAct = modalColumns.filter((column :any)=> column.id !== id)
-        setModalColumns(columnsAct)
+        const columnsAct = modalColumns.filter((column :any)=> column.id !== id);
+        const tasksAct = falseTasks.filter((task:any)=>task.column !== id);
+        setFalseTasks(tasksAct);
+        setModalColumns(columnsAct);
     }
     const actColumnName = (e:any,id:any)=>{
         const columnsAct = modalColumns.map((column:any)=>{
@@ -35,52 +39,39 @@ export default function EditBoardModal(props : any){
         });
         setModalColumns(columnsAct)
     }
-    const actBoardName = (e:any,id:any)=>{
-        const boardsAct = boards.map((board:any)=>{
-            if(board.id === id){
-                board.name = e.target.value
-            }
-            return board
-        });
-        setBoards(boardsAct)
-    }
-    const catchError = (e:any,id:any) =>{
-        if(e.target.value.length === 0){
-            e.target.classList.add('red');
-            setError([id,...error]);
-            return
-        }e.target.classList.remove('red');
-        const errAct = error.filter((err:any)=>err !== id)
-        setError([...errAct])
+    const actBoardName = (e:any)=>{
+        setBoardName(e.target.value)
     }
     const saveChanges = (e:any) =>{
         e.preventDefault();
-       if(error.length === 0){ 
+        const validation = modalColumns.map((c:any)=>c.name.length > 0);
+        const revalidation = validation.find((f:any)=>f === false);
+       if(boardName.length > 0 && revalidation === undefined){ 
         setEditBoardModal(false)
+        selectedBoard.name = boardName
         const testx = columns.filter((column:any)=>column.boardId !== board);
         setColumns([...modalColumns,...testx]);
+        setTasks(falseTasks)
         setAutoFocus(false);
         return
-        }console.log(error)
+        }alert(`Can't be empty fields`);
     }
     useEffect(()=>{
-        setModalColumns(columns.filter((column:any)=>column.boardId === board))
+        setModalColumns(columns.filter((column:any)=>column.boardId === board));
+        setBoardName(selectedBoard.name);
+        setFalseTasks(tasks);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
   
+    const {theme} = useTheme();
 
     return(
-        <Wrapper>
+        <Wrapper theme={theme}>
             <div className="modal">
                 <h1>Edit Board</h1>
-                <h2 >Board Name</h2>
+                <h2>Board Name</h2>
                 <div className="boardInput">
-                    <input type="text" defaultValue={selectedBoard.name} id="board-name" onChange={e=>actBoardName(e,selectedBoard.id)} onBlur={(e)=>catchError(e,selectedBoard.id)} />
-                    <label htmlFor="board-name" className="error">
-                        {error && error.map((err:any)=>(
-                            err === selectedBoard.id && `Can't be empty`
-                        ))}
-                    </label>
+                    <input type="text" defaultValue={boardName} id="board-name" onChange={e=>actBoardName(e)} />
                 </div>
                 <form className="board-columns">
                     <span>Board Columns</span>
@@ -88,14 +79,7 @@ export default function EditBoardModal(props : any){
                         modalColumns.map((column:any)=>(
                         <div key={column.id} className='columnInfo'>
                             <div className="input">
-                                <input type="text" defaultValue={column.name} onChange={(e)=>actColumnName(e,column.id)} autoFocus={autoFocus} onBlur={e=>catchError(e,column.id)} id={column.id}/>
-                                <label htmlFor={column.id} className='error'>
-                                    {
-                                        error && error.map((err:any)=>(
-                                            err === column.id && `Can't be empty`
-                                        ))
-                                    }
-                                </label>
+                                <input type="text" defaultValue={column.name} onChange={(e)=>actColumnName(e,column.id)} autoFocus={autoFocus} />
                             </div>
                             <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg" 
                             onClick={()=>deleteColumn(column.id)}><g fill="#828FA3" fillRule="evenodd"><path d="m12.728 0 2.122 2.122L2.122 14.85 0 12.728z"/><path d="M0 2.122 2.122 0 14.85 12.728l-2.122 2.122z"/></g></svg>
@@ -135,7 +119,7 @@ const Wrapper = styled.div`
     }
     .modal{
         width: 90%;
-        background-color: #2b2c37;
+        background-color: ${({theme})=>theme.bg};
         padding: 25px 20px;
         color: #fff;
         border-radius: 5px;
@@ -148,8 +132,8 @@ const Wrapper = styled.div`
         }
         input{
             background-color: transparent;
-            border: 1px solid #ffffff28;
-            color: #fff;
+            border: 1px solid #828FA3;
+            color: ${({theme})=>theme.font2};
             border-radius: 5px;
             padding: 10px;
             outline: none;
@@ -158,7 +142,7 @@ const Wrapper = styled.div`
                 border: 1px solid red;
             }
             &:focus{
-            background-color: #757575;
+                background-color: ${({theme})=>theme.darkBg};
             }
         }
         .boardInput{
@@ -175,13 +159,14 @@ const Wrapper = styled.div`
             font-size: 18px;
             font-weight: 500;
             margin-bottom: 15px;
+            color: ${({theme})=>theme.font2};
         }
         h2{
             display: block;
             font-size: 12px;
             font-weight: 600;
             margin-bottom: 5px;
-            
+            color:${({theme})=>theme.font2};
         }
         #board-name{
             width: 100%;
@@ -191,6 +176,7 @@ const Wrapper = styled.div`
             span{
                 font-size: 12px;
                 font-weight: 600;
+                color: ${({theme})=>theme.font2};
             }
             div{
                 margin-top: 5px;
@@ -227,7 +213,7 @@ const Wrapper = styled.div`
                     font-weight: 600;
                 }
                 .add-new-column{
-                    background-color: #fff;
+                    background: (#635FC7,#fff);
                     color: #635fc7;
                     
                 }

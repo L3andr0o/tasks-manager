@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components"
 import { useData } from "../context/dataContext";
 import { useModals } from "../context/modalsContext";
+import { useTheme } from "../context/themeContext";
 
 export default function AddNewTaskModal(){
 
@@ -21,20 +22,6 @@ export default function AddNewTaskModal(){
         }]);
     const [newTask, setNewTask] = useState({title:'',description:''})
     const handleChange = ({target : {name, value}}:any) =>setNewTask({...newTask, [name]: value});
-    const [error,setError] = useState<any>([]);
-    const catchError = (e:any,id:any) =>{
-        const validation = error.map((err:any) => err === id)
-        if(!validation[0]){
-            if(e.target.value.length === 0){
-            e.target.classList.add('red');
-            setError([id,...error]);
-            }
-            return
-        }e.target.classList.remove('red');
-        const errAct = error.filter((err:any)=>err !== id)
-        setError([...errAct])
-        console.log(error)
-    }
 
     const addNewSubtask = (e:any,subtask:any)=>{
         e.preventDefault();
@@ -65,10 +52,14 @@ export default function AddNewTaskModal(){
     }
 
     const createTask = (e:any)=>{
-        e.preventDefault()
+        e.preventDefault();
+        const validation = subtasks.map((st:any)=>st.content.length > 0);
+        const revalidation = validation.find((f:any)=>f === false);
        if(
         newTask.title.length > 0 &&
-        newTask.description.length > 0
+        newTask.description.length > 0 &&
+        subtasks.length > 0 &&
+        revalidation === undefined
         ){  
         const task : any= {
             id:uuidv4(),
@@ -83,38 +74,24 @@ export default function AddNewTaskModal(){
         return
        }alert(`Can't be empty fields`)
     }
+    const {theme} = useTheme();
 
     return(
-        <Wrapper >
+        <Wrapper theme={theme}>
             <div className="modal">
                 <h1>Add New Task</h1>
                 <form>
                     <label htmlFor="task">Title</label>
-                    <div>
-                        <input type="text" placeholder="e.g. Take coffee break" id="title" name="title" onChange={handleChange} onBlur={e=>catchError(e,'title')}/>
-                        {error && error.map((err:any)=>(
-                        err === 'title' && 
-                        <i key={err}>Can't be empty</i>
-                        ))}
-                    </div>
+                    <input type="text" placeholder="e.g. Take coffee break" id="title" name="title" onChange={handleChange} />
                     <label htmlFor="description">Description</label>
-                    <div>
-                        <input type="text" placeholder="e.g. It’s always good to take a break. This 15 minute break will  recharge the batteries a little." id="description" name="description" onChange={handleChange} onBlur={(e)=>catchError(e,'description')}/>
-                        {error && error.map((err:any)=>(
-                            err === 'description' && <i key={err}>Can't be empty</i>
-                        ))}
-                    </div>
+                    <input type="text" placeholder="e.g. It’s always good to take a break. This 15 minute break will  recharge the batteries a little." id="description" name="description" onChange={handleChange}/>
                     <div className="subtasks">
                         <span>Subtasks</span>
                         {
                             subtasks.length > 0 && 
                             subtasks.map((subtask:any)=>(
                                 <div key={subtask.id}>
-                                    <input type="text" placeholder={subtask.placeholder!} onChange={e=>actSubtask(e,subtask.id)} onBlur={e=>catchError(e,subtask.id)}/>
-                                    {error && error.map((err:any)=>(
-                                        err === subtask.id && 
-                                        <i key={err}>Can't be empty</i>
-                                        ))}
+                                    <input type="text" placeholder={subtask.placeholder!} onChange={e=>actSubtask(e,subtask.id)}/>
                                     <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg" onClick={()=>deleteSubtask(subtask.id)}><g fill="#828FA3" fillRule="evenodd"><path d="m12.728 0 2.122 2.122L2.122 14.85 0 12.728z"/><path d="M0 2.122 2.122 0 14.85 12.728l-2.122 2.122z"/></g></svg>
                                 </div>
                             ))
@@ -166,9 +143,9 @@ const Wrapper = styled.div`
     }
     .modal{
         width: 90%;
-        background-color: #2b2c37;
+        background-color: ${({theme})=>theme.bg};
         padding: 25px 20px;
-        color: #fff;
+        color: ${({theme})=>theme.font2};
         border-radius: 5px;
         max-width: 25em;
         animation: show .3s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0s 1 normal forwards;
@@ -180,14 +157,15 @@ const Wrapper = styled.div`
         
         input{
             background-color: transparent;
-            border: 1px solid #ffffff28;
-            color: #fff;
+            border: 1px solid #828FA3;
+            color: ${({theme})=>theme.font2};
             border-radius: 5px;
             padding: 10px;
             width: 100%;
             outline: none;
             &:focus{
                 border: 1px solid #635fc7;
+                background-color: ${({theme})=>theme.darkBg};
             }
             &.red{
                 border: 1px solid #f00;
@@ -208,6 +186,7 @@ const Wrapper = styled.div`
             font-size: 18px;
             font-weight: 500;
             margin-bottom: 15px;
+            color: ${({theme})=>theme.font2};
         }
         label, span{
             display: block;
@@ -215,6 +194,7 @@ const Wrapper = styled.div`
             font-weight: 600;
             margin-bottom: 5px;
             margin-top: 15px;
+            color: ${({theme})=>theme.font2};
         }
        
         button{
@@ -239,12 +219,9 @@ const Wrapper = styled.div`
                 input{
                     width: 90%;
                 }
-                i{
-                    right: calc(10% + 10px);
-                }
             }
             .subtasks-btn{
-                background-color: #fff;
+                background: (#635FC7,#fff);
                 color: #635fc7;
             }
         }
@@ -256,7 +233,7 @@ const Wrapper = styled.div`
                 justify-content: space-between;
                 align-items: center;
                 background-color: transparent;
-                border: 1px solid #ffffff28;
+                border: 1px solid #828FA3;
                 color: #fff;
                 border-radius: 5px;
                 width: 100%;
@@ -275,7 +252,7 @@ const Wrapper = styled.div`
                 display: none;
                 position: absolute;
                 width: 100%;
-                background-color: #20212C;
+                background-color: ${({theme})=>theme.bg};
                 top: 115%;
                 &.active{
                     display: block;
@@ -289,7 +266,7 @@ const Wrapper = styled.div`
                     font-weight: 600;
                     color: #828FA3;
                     &.true{
-                    background-color: #0c0c33;
+                    background-color: ${({theme})=>theme.darkBg};
                     }
                     &:hover{
                     border: 1px solid #635fc7;

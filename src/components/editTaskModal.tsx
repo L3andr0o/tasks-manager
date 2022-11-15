@@ -4,11 +4,12 @@ import { useState,useEffect } from "react";
 import { uuidv4 } from "@firebase/util";
 import { useData } from "../context/dataContext";
 import { useParams } from "react-router-dom";
+import { useTheme } from "../context/themeContext";
 
 export default function EditTaskModal(){
 
     const {selectedTask,setEditTaskModal} = useModals();
-    const {columns,tasks} = useData()
+    const {columns} = useData()
     const board = useParams()
 
     const [newTask, setNewTask] = useState({title:selectedTask.title,description:selectedTask.description})
@@ -44,9 +45,8 @@ export default function EditTaskModal(){
     selectedTask.title = newTask.title;
     selectedTask.description = newTask.description;
     selectedTask.subtasks = modalSubtasks;
-    selectedTask.column = selectedColumn;
-    console.log(selectedTask);
-    console.log(tasks);
+    selectedTask.column = selectedColumn.id;
+    setEditTaskModal(false)
 }
 
     useEffect(()=>{
@@ -57,19 +57,21 @@ export default function EditTaskModal(){
     useEffect(()=>{
         // eslint-disable-next-line array-callback-return
         boardColumns.map((column:any)=>{
-          if(column.name === selectedTask.column){
-            setSelectedColumn(column.name);
-            return column
-          }else{ console.log('xd')}
-        })
+            if(column.id === selectedTask.column){
+              setSelectedColumn(column);
+              return column
+            }
+          })
       },[boardColumns,selectedTask])
 
     useEffect(()=>{
         setModalSubtasks(selectedTask.subtasks)
     },[selectedTask.subtasks])
 
+    const {theme} = useTheme();
+
     return(
-        <Wrapper >
+        <Wrapper theme={theme}>
             <div className="modal">
                 <h1>Edit Task</h1>
                 <form>
@@ -94,14 +96,18 @@ export default function EditTaskModal(){
                     </div>
                     <div className='select'>
                         <span>Status</span>
-                        <div className='selected-option' onClick={selectHandler}>
-                        {(columns.length > 0) && <span>{selectedColumn}</span>}
+                        <div className={`selected-option ${selectState}`} onClick={selectHandler}>
+                        {(selectedColumn) && <span>{selectedColumn.name}</span>}
                         <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg"><path stroke="#635FC7" strokeWidth="2" fill="none" d="m1 1 4 4 4-4"/></svg>
                         </div>
                         <ul className={selectState!}>
                         {(columns.length > 0) &&
                             columns.map((column:any)=>(
-                            <li key={column.id} onClick={()=>setSelectedColumn(column.name)}>{column.name}</li>
+                            <li 
+                            key={column.id} 
+                            onClick={()=>setSelectedColumn(column)}
+                            className={`${selectedColumn && column.id === selectedColumn.id}`}
+                            >{column.name}</li>
                             ))
                         }
                         </ul>
@@ -134,7 +140,7 @@ const Wrapper = styled.div`
     }
     .modal{
         width: 90%;
-        background-color: #2b2c37;
+        background-color: ${({theme})=>theme.bg};
         padding: 25px 20px;
         color: #fff;
         border-radius: 5px;
@@ -147,16 +153,22 @@ const Wrapper = styled.div`
         }
         input{
             background-color: transparent;
-            border: 1px solid #ffffff28;
-            color: #fff;
+            border: 1px solid #828FA3;
+            color: ${({theme})=>theme.font2};
             border-radius: 5px;
             padding: 10px;
             width: 100%;
+            outline: none;
+            &:focus{
+                border: 1px solid #635FC7;
+                background-color: ${({theme})=>theme.darkBg};
+            }
         }
         h1{
             font-size: 18px;
             font-weight: 500;
             margin-bottom: 15px;
+            color: ${({theme})=>theme.font2};
         }
         label, span{
             display: block;
@@ -164,6 +176,7 @@ const Wrapper = styled.div`
             font-weight: 600;
             margin-bottom: 5px;
             margin-top: 15px;
+            color: #828FA3;
         }
         button{
             width: 100%;
@@ -189,47 +202,59 @@ const Wrapper = styled.div`
                 }
             }
             .subtasks-btn{
-                background-color: #fff;
+                background: (#635FC7,#fff);
                 color: #635fc7;
             }
         }
         .select{
             width: 100%;
+            margin-top: 10px;
+            position: relative;
             .selected-option{
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 background-color: transparent;
-                border: 1px solid #ffffff28;
-                color: #fff;
+                border: 1px solid #828FA3;
                 border-radius: 5px;
                 width: 100%;
                 height: fit-content;
                 padding: 10px;
+                &.active{
+                    border: 1px solid #635fc7;
+                }
                 span{
                     margin: 0;
+                    color: ${({theme})=>theme.font2};
                 }
             }
             ul{
-                border-radius: 5px;
-                overflow: hidden;
-                display: none;
-                &.active{
-                    display: block;
-                }
-                &.hidden{
-                    display: none;
-                }
-                li{
-                    padding: 10px;
-                    border: 1px solid #ffffff28;
-                    font-size: 12px;
-                    font-weight: 600;
-                    &.true{
-                        background-color: #3e3f4b;
-                    }
-                }
+            border-radius: 5px;
+            overflow: hidden;
+            display: none;
+            position: absolute;
+            width: 100%;
+            background-color: ${({theme})=>theme.bg};
+            top: 115%;
+            &.active{
+              display: block;
             }
+            &.hidden{
+              display: none;
+            }
+            li{
+              padding: 10px;
+              font-size: 12px;
+              font-weight: 600;
+              color: #828FA3;
+              &.true{
+              background-color: ${({theme})=>theme.darkBg};
+              }
+              &:hover{
+              border: 1px solid #635fc7;
+              }
+            }
+          }
         }
         .tasks-btn{
             background-color: #635fc7;

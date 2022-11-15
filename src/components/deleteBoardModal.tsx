@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components"
 import { useData } from "../context/dataContext";
 import { useModals } from "../context/modalsContext"
+import { useTheme } from "../context/themeContext";
 
 export default function DeleteBoardModal(){
 
@@ -11,18 +12,24 @@ export default function DeleteBoardModal(){
 
     const deleteBoard = (e:any)=>{
         e.preventDefault();
+        if(boards.length > 1){
         const boardAct = boards.filter((board:any)=>board.id !== selectedBoard.id);
         setBoards(boardAct);
         const columnsAct = columns.filter((column:any)=>column.boardId !== selectedBoard.id);
         setColumns(columnsAct);
         const tasksAct = tasks.filter((task:any)=>task.board !== selectedBoard.id);
         setTasks(tasksAct);
-        navigate(`/${boards[0].id}`);
-        setSelectedBoard(boards[0])
+        navigate(`/${boardAct[0].id}`);
+        setSelectedBoard(boardAct[0]);
+        setDeleteBoardModal(false)
+        return
+        }alert(`Boards can't be zero`)
     }
 
+    const {theme} = useTheme()
+
     return(
-        <Wrapper>
+        <Wrapper theme={theme}>
             <div className="modal">
                 <h1>Delete this board?</h1>
                 <p>Are you sure you want to delete the {selectedBoard.name} board? This action will remove all columns and tasks and cannot be reversed.</p>
@@ -55,7 +62,7 @@ const Wrapper = styled.div`
     }
     .modal{
         width: 90%;
-        background-color: #2b2c37;
+        background-color: ${({theme})=>theme.bg};
         padding: 20px;
         border-radius: 5px;
         max-width: 25em;
@@ -84,7 +91,7 @@ const Wrapper = styled.div`
                 color: #fff;
             }
             &.cancelBtn{
-                background-color: #fff;
+                background: (#635FC7,#fff);
                 color: #635FC7;
             }
         }

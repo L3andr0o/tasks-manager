@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import { useData } from "../context/dataContext";
 import { useModals } from "../context/modalsContext"
+import { useTheme } from "../context/themeContext";
 
 export default function DeleteTaskModal(){
 
@@ -14,8 +15,10 @@ export default function DeleteTaskModal(){
         setDeleteTaskModal(false)
     }
 
+    const {theme} = useTheme();
+
     return(
-        <Wrapper>
+        <Wrapper theme={theme}>
             <div className="modal">
                 <h1>Delete this task?</h1>
                 <p>Are you sure you want to delete the ‘Build settings UI’ task and its subtasks? This action cannot be reversed.</p>
@@ -48,7 +51,7 @@ const Wrapper = styled.div`
     }
     .modal{
         width: 90%;
-        background-color: #2b2c37;
+        background-color: ${({theme})=>theme.bg};
         padding: 20px;
         border-radius: 5px;
         max-width: 25em;
@@ -77,7 +80,7 @@ const Wrapper = styled.div`
                 color: #fff;
             }
             &.cancelBtn{
-                background-color: #fff;
+                background: (#635FC7,#fff);
                 color: #635FC7;
             }
         }

@@ -13,6 +13,7 @@ import AddNewBoardModal from '../components/addNewBoardModal';
 import DeleteTaskModal from '../components/deleteTaskModal';
 import EditTaskModal from '../components/editTaskModal';
 import DeleteBoardModal from '../components/deleteBoardModal';
+import { useTheme } from '../context/themeContext';
 
 export default function Home(){
 
@@ -23,6 +24,7 @@ export default function Home(){
   const [boardColumns, setBoardColumns] = useState<any>([]);
   const navigate = useNavigate();
   const boardId = useParams();
+  const {theme} = useTheme();
 
   const showTask = (task:any) =>{  
   	setTaskState(true);
@@ -46,7 +48,7 @@ export default function Home(){
   },[columns,boardId,tasks])
 
   return(
-    <Wrapper>
+    <Wrapper theme={theme}>
         <GlobalStyles />
         <NavBar />
         {
@@ -106,7 +108,7 @@ export default function Home(){
 
 const Wrapper = styled.div`
   position: relative;
-  background-color: #20212c;
+  background-color: ${({theme})=>theme.darkBg};
   min-height: 100vh;
   height: 100%;
   overflow: hidden;
@@ -128,24 +130,24 @@ const Wrapper = styled.div`
         height: 100%;
         margin: 0 10px;
         h1{
-          color: #ccc;
+          color: ${({theme})=>theme.font};
           text-transform: uppercase;
           font-size: 14px;
           font-weight: 300;
           }
         .task{
           width: 100%;
-          background-color: #2b2c37;
+          background-color: ${({theme})=>theme.bg};
           border-radius: 5px;
           padding: 20px 15px;
           margin-top: 20px;
         h1{
-          color: #fff;
+          color: ${({theme})=>theme.font2};
           font-weight: 600;
           text-transform: none;
           }
         h2{
-          color:#ccc;
+          color:${({theme})=>theme.font};
           font-size: 12px;
           font-weight: 200;
           margin-top: 10px;
@@ -157,10 +159,10 @@ const Wrapper = styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
-        background: linear-gradient(to bottom, #0001,#0002);
+        background: linear-gradient(${({theme})=>theme.bg},#0001);
         border-radius: 5px;
         span{
-          color: #AFB6B9;
+          color: ${({theme})=>theme.font};
           font-size: 22px;
           font-weight: 600;
         }
@@ -179,13 +181,13 @@ const Wrapper = styled.div`
       width: 80%;
       max-width: 30em;
       text-align: center;
-      background-color: #20212c;
+      background-color: ${({theme})=>theme.darkBg};
       h1{
         font-size: 18px;
         color: #9292af;
       }
       button{
-        background-color: #635fc7;
+        background-color: ${({theme})=>theme.primaryColor};
         border: none;
         outline: none;
         color: #fff;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { useTheme } from '../context/themeContext';
 import { useData } from '../context/dataContext';
 import { useModals } from '../context/modalsContext';
 
@@ -34,9 +35,10 @@ export default function NavBar(){
         setBoardColumns(columns.filter((column:any)=>column.boardId === board.board))
     },[columns,board])
    
+    const {theme,themeHandler,choose} = useTheme();
 
     return(
-        <Wrapper>
+        <Wrapper theme={theme}>
             <div className='left'>
                 <div className='logo'>
                     <svg width='24' height='25' xmlns='http://www.w3.org/2000/svg'><g fill='#635FC7' fillRule='evenodd'><rect width='6' height='25' rx='2'/><rect opacity='.75' x='9' width='6' height='25' rx='2'/><rect opacity='.5' x='18' width='6' height='25' rx='2'/></g></svg>
@@ -83,7 +85,7 @@ export default function NavBar(){
                     <div className='theme-changer'>
                         <svg width="19" height="19" xmlns="http://www.w3.org/2000/svg"><path d="M9.167 15.833a.833.833 0 0 1 .833.834v.833a.833.833 0 0 1-1.667 0v-.833a.833.833 0 0 1 .834-.834ZM3.75 13.75a.833.833 0 0 1 .59 1.422l-1.25 1.25a.833.833 0 0 1-1.18-1.178l1.25-1.25a.833.833 0 0 1 .59-.244Zm10.833 0c.221 0 .433.088.59.244l1.25 1.25a.833.833 0 0 1-1.179 1.178l-1.25-1.25a.833.833 0 0 1 .59-1.422ZM9.167 5a4.167 4.167 0 1 1 0 8.334 4.167 4.167 0 0 1 0-8.334Zm-7.5 3.333a.833.833 0 0 1 0 1.667H.833a.833.833 0 1 1 0-1.667h.834Zm15.833 0a.833.833 0 0 1 0 1.667h-.833a.833.833 0 0 1 0-1.667h.833Zm-1.667-6.666a.833.833 0 0 1 .59 1.422l-1.25 1.25a.833.833 0 1 1-1.179-1.178l1.25-1.25a.833.833 0 0 1 .59-.244Zm-13.333 0c.221 0 .433.088.59.244l1.25 1.25a.833.833 0 0 1-1.18 1.178L1.91 3.09a.833.833 0 0 1 .59-1.422ZM9.167 0A.833.833 0 0 1 10 .833v.834a.833.833 0 1 1-1.667 0V.833A.833.833 0 0 1 9.167 0Z" fill="#828FA3"/></svg>
                             <div className="toggle">
-                                <div></div>
+                                <div onClick={themeHandler} className={`${choose}`}></div>
                             </div>
                         <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg"><path d="M6.474.682c.434-.11.718.406.481.78A6.067 6.067 0 0 0 6.01 4.72c0 3.418 2.827 6.187 6.314 6.187.89.002 1.77-.182 2.584-.54.408-.18.894.165.724.57-1.16 2.775-3.944 4.73-7.194 4.73-4.292 0-7.771-3.41-7.771-7.615 0-3.541 2.466-6.518 5.807-7.37Zm8.433.07c.442-.294.969.232.674.674l-.525.787a1.943 1.943 0 0 0 0 2.157l.525.788c.295.441-.232.968-.674.673l-.787-.525a1.943 1.943 0 0 0-2.157 0l-.786.525c-.442.295-.97-.232-.675-.673l.525-.788a1.943 1.943 0 0 0 0-2.157l-.525-.787c-.295-.442.232-.968.674-.673l.787.525a1.943 1.943 0 0 0 2.157 0Z" fill="#828FA3"/></svg>
                     </div>
@@ -109,7 +111,7 @@ export default function NavBar(){
 const Wrapper = styled.div`
     width: 100%;
     height: 4em;
-    background-color: #2b2c37;
+    background-color: ${({theme})=>theme.bg};
     display: flex;
     align-items: center;
     padding: 0 10px;
@@ -126,7 +128,7 @@ const Wrapper = styled.div`
         left: 0;
         top: 92vh;
         z-index: 200;
-        background-color: #635fc7;
+        background-color:${({theme})=>theme.primaryColor};
         width: 3em;
         padding: 10px 0;
         text-align: center;
@@ -173,10 +175,9 @@ const Wrapper = styled.div`
             display: flex;
             align-items: center;
             margin-left: 10px;
-            color: #fff;
+            color: ${({theme})=>theme.font2};
             @media (min-width: 768px) {
                 pointer-events: none;
-                /* margin-left: 100px; */
             }
             h2{
                 font-size: 16px;
@@ -193,9 +194,6 @@ const Wrapper = styled.div`
                     height: 5em;
                     background-color: #b3adad99;
                     }
-                    /* &.null{
-                        margin-left: 80px;
-                    } */
                     &.hidden{
                         margin-left: 80px;
                         animation: test .3s cubic-bezier(0.075, 0.82, 0.165, 1) 0s 1 normal forwards;
@@ -235,8 +233,8 @@ const Wrapper = styled.div`
         display: flex;
         align-items: center;
         .add-btn{
-            background-color: #635fc7;
-            min-width: 3em;
+            background-color: ${({theme})=>theme.primaryColor};
+            min-width: 2em;
             height: 2em;
             width: fit-content;
             display: flex;
@@ -244,11 +242,10 @@ const Wrapper = styled.div`
             align-items: center;
             border-radius: 15px;
             margin-right: 10px;
-            padding: 0 25px;
+            padding: 0 15px;
             &.false{
                 opacity: .5;
             }
-
             @media (min-width: 768px){
                 height: 2.5em;
                 border-radius: 25px;
@@ -279,6 +276,7 @@ const Wrapper = styled.div`
             top: 0;
             background-color: #1212142f;
             display: none;
+            z-index: 20;
             &.visible{
                 display: block;
             }
@@ -290,7 +288,7 @@ const Wrapper = styled.div`
     .burger-menu{
         position: absolute;
         top: 5em;
-        background-color: #3e3f4e;
+        background-color: ${({theme})=>theme.bg};
         width: 80%;
         height: fit-content;
         left: 10%;
@@ -299,7 +297,6 @@ const Wrapper = styled.div`
         z-index: 200;
         .content{
             height: fit-content;
-            /* background-color: #2df; */
             align-items: flex-start;
         }
         @media (min-width: 768px) {
@@ -308,7 +305,7 @@ const Wrapper = styled.div`
             width: 15em;
             height: 100vh;
             border-radius: 0;
-            background-color: #2b2c37;
+            background-color: ${({theme})=>theme.bg};
             border-right: 1px solid #b3adad99;
             flex-direction: column;
             align-items: center;
@@ -357,14 +354,13 @@ const Wrapper = styled.div`
         h3{
             font-size: 12px;
             letter-spacing: 2px;
-            color: #9292af;
-            font-weight: 300;
+            color: ${({theme})=>theme.font};
+            font-weight: 600;
             margin: 0 15px;
         }
         ul{
             display: flex;
             flex-direction: column;
-            /* align-items: center; */
             justify-content: space-between;
             width: fit-content;
             margin: 10px 0;
@@ -376,6 +372,7 @@ const Wrapper = styled.div`
                 width: 90%;
                 position: relative;
                 padding-left: 15px;
+                font-weight: 600;
                &.selectedBoard{
                 &::after{
                     content: '';
@@ -384,7 +381,7 @@ const Wrapper = styled.div`
                     left: 0;
                     height: 100%;
                     width: 100%;
-                    background-color: #635fc7;
+                    background-color: ${({theme})=>theme.primaryColor};
                     z-index: -1;
                     border-radius: 0 25px 25px 0;
                 }
@@ -398,12 +395,13 @@ const Wrapper = styled.div`
             }
         }
         .create-board{
-            color: #635fc7;
+            color: ${({theme})=>theme.primaryColor};
             margin: 0 15px;
+            font-weight: 600;
             svg{
                 margin-right: 8px;
                 path{
-                    fill: #635fc7;
+                    fill: ${({theme})=>theme.primaryColor};
                 }
             }
         }
@@ -412,18 +410,15 @@ const Wrapper = styled.div`
             width: 90%;
             .theme-changer{
             width: 100%;
-            background-color: #2b2c37;
+            background-color: ${({theme})=>theme.darkBg};
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: space-evenly;
             height: 2.5em;
             margin-top: 15px;
-            @media (min-width: 768px) {
-                background-color: #20212c;
-            }
             div{
-                background-color: #635fc7;
+                background-color: ${({theme})=>theme.primaryColor};
                 width: 40px;
                 border-radius: 15px;
                 height: 20px;
@@ -433,6 +428,17 @@ const Wrapper = styled.div`
                     width: 50%;
                     background-color: #fff;
                     border-radius: 50%;
+                    &.false{
+                        animation: trs .3s ease-in 0s 1 normal forwards;
+                        @keyframes trs {100%{transform:translateX(100%);}}
+                    }
+                    &.true{
+                        animation: trsb .3s ease-in 0s 1 normal forwards;
+                        @keyframes trsb {
+                            0%{transform:translateX(100%);}
+                            100%{transform:translateX(0%);}
+                        }
+                    }
                 }
             }
         }
@@ -445,7 +451,7 @@ const Wrapper = styled.div`
                     margin-right: 10px;
                 }
                 span{
-                    color: #828FA3;
+                    color: ${({theme})=>theme.font};
                 }
                 }
             }
@@ -458,7 +464,7 @@ const Wrapper = styled.div`
           top: 3.5em;
           display: flex;
           flex-direction: column;
-          background-color: #20212C;
+          background-color: ${({theme})=>theme.bg};
           width: 8em;
           padding: 10px;
           justify-content: space-around;
@@ -471,7 +477,7 @@ const Wrapper = styled.div`
             align-items: center;
             font-size: 14px;
             &.editBoard{
-              color: #828FA3;
+              color: ${({theme})=>theme.font};
             }
             &.deleteBoard{
               color: #EA5555;
