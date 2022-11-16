@@ -19,7 +19,7 @@ export default function Home(){
 
   const {editBoardModal, addNewTaskModal, setEditBoardModal,taskState, setTaskState, addNewBoardModal,setSelectedTask,deleteTaskModal,editTaskModal,deleteBoardModal} = useModals()
   const {user, logout} = useAuth();
-  const {columns,tasks,selectedBoard,boards} = useData();
+  const {columns,tasks,selectedBoard} = useData();
   const [boardTasks, setBoardTasks] = useState<any>(null);
   const [boardColumns, setBoardColumns] = useState<any>([]);
   const navigate = useNavigate();
@@ -29,7 +29,8 @@ export default function Home(){
   const showTask = (task:any) =>{  
   	setTaskState(true);
 		setSelectedTask(task)
-};
+  };
+  console.log(user)
   
   const handleLogout = async () =>{
     try {
