@@ -116,12 +116,13 @@ const Wrapper = styled.div`
   .columns{
     max-width: 98vw;
     width: fit-content;
-    height: 86vh;
+    height: 88vh;
     overflow: scroll;
     margin: 20px auto;
     @media (min-width:768px) {
-      overflow: auto;
       margin: 20px;
+      overflow: auto;
+      overflow-y: hidden;
     }
     .container{
       display: flex;
@@ -129,10 +130,13 @@ const Wrapper = styled.div`
       width: fit-content;
       max-width: 1000vw;
       height: 100%;
+      position: relative;
       padding-right: 20px;
       @media (min-width:768px) {
-        overflow: auto;
-        width: fit-content;
+        overflow-x: hidden;
+        ::-webkit-scrollbar {
+        display: none;
+        }
       }
       .column{
         width: 17em;
@@ -150,6 +154,10 @@ const Wrapper = styled.div`
           border-radius: 5px;
           padding: 20px 15px;
           margin-top: 20px;
+          cursor: pointer;
+          &:hover{
+            h1{color:${({theme})=>theme.primaryColor};}
+          }
         h1{
           color: ${({theme})=>theme.font2};
           font-weight: 600;
@@ -166,10 +174,15 @@ const Wrapper = styled.div`
       .addColumn{
         width: 17em;
         display: flex;
+        height: 98vh;
         justify-content: center;
         align-items: center;
         background: linear-gradient(${({theme})=>theme.bg},#0001);
         border-radius: 5px;
+        cursor: pointer;
+        &:hover{
+          span{color:${({theme})=>theme.primaryColor};}
+        }
         span{
           color: ${({theme})=>theme.font};
           font-size: 22px;
@@ -179,7 +192,7 @@ const Wrapper = styled.div`
     }
   }
   .content{
-    height: 90vh;
+    height: 88vh;
     position: relative;
     display: flex;
     flex-direction: column;

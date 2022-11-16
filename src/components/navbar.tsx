@@ -247,8 +247,16 @@ const Wrapper = styled.div`
             border-radius: 15px;
             margin-right: 10px;
             padding: 0 15px;
+            cursor: pointer;
+            transition: background-color .3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            &:hover:not(.false){
+                background-color: #A8A4FF;
+            }
             &.false{
                 opacity: .5;
+                cursor: not-allowed;
+                user-select: none;
+                /* pointer-events: none; */
             }
             @media (min-width: 768px){
                 height: 2.5em;
@@ -268,6 +276,9 @@ const Wrapper = styled.div`
                     color: #fff;
                 }
             }
+        }
+        .more{
+            cursor: pointer;
         }
    }
    .bg{
@@ -496,7 +507,8 @@ const Wrapper = styled.div`
           display: flex;
           flex-direction: column;
           background-color: ${({theme})=>theme.bg};
-          width: 8em;
+          width: 40%;
+          max-width: 10em;
           padding: 10px;
           justify-content: space-around;
           height: 5em;
@@ -507,6 +519,7 @@ const Wrapper = styled.div`
             display: flex;
             align-items: center;
             font-size: 14px;
+            cursor: pointer;
             &.editBoard{
               color: ${({theme})=>theme.font};
             }

@@ -17,7 +17,7 @@ export default function AddNewBoardModal(){
         id:boardId
     }
     const navigate = useNavigate();
-    const [autoFocus,setAutoFocus] = useState<any>(false);
+    const [autoFocus,setAutoFocus] = useState<boolean>(false);
     const [modalColumns,setModalColumns] = useState<any>([]);
     const addNewColumn = (e:any,column:any)=>{
         e.preventDefault()
@@ -26,11 +26,11 @@ export default function AddNewBoardModal(){
         setModalColumns(columnsAct)
         setAutoFocus(true)
     };
-    const deleteColumn = (id:any)=>{
+    const deleteColumn = (id:string)=>{
         const columnsAct = modalColumns.filter((column :any)=> column.id !== id)
         setModalColumns(columnsAct)
     }
-    const actColumnName = (e:any,id:any)=>{
+    const actColumnName = (e:any,id:string)=>{
         const columnsAct = modalColumns.map((column:any)=>{
             if(column.id === id){
                 column.name = e.target.value
