@@ -78,10 +78,16 @@ const Wrapper = styled.div`
             &.deleteBtn{
                 background-color: #EA5555;
                 color: #fff;
+                cursor: pointer;
+                transition: background-color .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                &:hover{background-color:#FF9898;}
             }
             &.cancelBtn{
                 background: (#635FC7,#fff);
                 color: #635FC7;
+                cursor: pointer;
+                transition: background-color .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                &:hover{background-color:#b7b5f0;}
             }
         }
     }

@@ -144,17 +144,11 @@ const Wrapper = styled.div`
             }
             &:focus{
                 background-color: ${({theme})=>theme.darkBg};
+                border: 1px solid #635FC7;
             }
         }
         .boardInput{
             position: relative;
-            .error{
-                position: absolute;
-                right: 10px;
-                color: #f00;
-                top: calc(50% - 6px);
-                font-size: 12px;
-            }
         }
         h1{
             font-size: 18px;
@@ -190,15 +184,15 @@ const Wrapper = styled.div`
                     input{
                     width: 100%;
                     }   
-                    .error{
-                    position: absolute;
-                    right: 10px;
-                    color: #f00;
-                    top: calc(50% - 6px);
-                    font-size: 12px;
                 }
+                svg{
+                    cursor: pointer;
+                    &:hover{
+                        path{
+                            fill: red;
+                        }
+                    }
                 }
-               
             }
             .buttons{
                 display: flex;
@@ -216,12 +210,17 @@ const Wrapper = styled.div`
                 .add-new-column{
                     background: (#635FC7,#fff);
                     color: #635fc7;
-                    
+                    cursor: pointer;
+                    transition: background-color .3s cubic-bezier(0.165, 0.84, 0.44, 1);
+                    &:hover{background-color:#b7b5f0;}
                 }
                 .save-changes{
                     background-color: #635fc7;
                     color: #fff;
                     margin-top: 15px;
+                    cursor: pointer;
+                    transition: background-color .3s cubic-bezier(0.165, 0.84, 0.44, 1);
+                    &:hover{background-color:#A8A4FF;}
                 }
             }
         }

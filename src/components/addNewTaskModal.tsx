@@ -220,10 +220,21 @@ const Wrapper = styled.div`
                 input{
                     width: 90%;
                 }
+                svg{
+                    cursor: pointer;
+                    &:hover{
+                        path{
+                            fill: red;
+                        }
+                    }
+                }
             }
             .subtasks-btn{
                 background: (#635FC7,#fff);
                 color: #635fc7;
+                cursor: pointer;
+                transition: background-color .3s cubic-bezier(0.165, 0.84, 0.44, 1);
+                &:hover{background-color:#b7b5f0;}
             }
         }
         .select{
@@ -240,6 +251,7 @@ const Wrapper = styled.div`
                 width: 100%;
                 height: fit-content;
                 padding: 10px;
+                cursor: pointer;
                 &.active{
                     border: 1px solid #635fc7;
                 }
@@ -266,6 +278,7 @@ const Wrapper = styled.div`
                     font-size: 12px;
                     font-weight: 600;
                     color: #828FA3;
+                    cursor: pointer;
                     &.true{
                     background-color: ${({theme})=>theme.darkBg};
                     }
@@ -279,6 +292,9 @@ const Wrapper = styled.div`
             background-color: #635fc7;
             color: #fff;    
             margin-top: 15px;
+            cursor: pointer;
+            transition: background-color .3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            &:hover{background-color:#A8A4FF;}
         }
     }
 `

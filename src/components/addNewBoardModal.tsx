@@ -127,6 +127,7 @@ const Wrapper = styled.div`
             transition: background-color .3s cubic-bezier(0.165, 0.84, 0.44, 1);
             &:focus{
             background-color: ${({theme})=>theme.darkBg};
+            border: 1px solid #635FC7;
             }
         }
         h1{
@@ -176,12 +177,17 @@ const Wrapper = styled.div`
                 .add-new-column{
                     background: (#635FC7,#fff);
                     color: #635fc7;
-                    
+                    cursor: pointer;
+                    transition: background-color .3s cubic-bezier(0.165, 0.84, 0.44, 1);
+                    &:hover{background-color:#b7b5f0;}
                 }
                 .save-changes{
                     background-color: #635fc7;
                     color: #fff;
                     margin-top: 15px;
+                    cursor: pointer;
+                    transition: background-color .3s cubic-bezier(0.165, 0.84, 0.44, 1);
+                    &:hover{background-color:#A8A4FF;}
                 }
             }
         }

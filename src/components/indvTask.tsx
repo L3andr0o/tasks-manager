@@ -163,6 +163,7 @@ const Wrapper = styled.div`
         h1{
           font-size: 16px;
         }
+        svg{cursor:pointer;}
         .taskMenu{
           position: absolute;
           right: -12%;
@@ -181,6 +182,7 @@ const Wrapper = styled.div`
             margin: 0;
             display: flex;
             align-items: center;
+            cursor: pointer;
             &.editTask{
               color: #828FA3;
             }
@@ -201,11 +203,14 @@ const Wrapper = styled.div`
           font-size: 12px;
           border-radius: 5px;
           margin: 8px 0;
+          cursor: pointer;
+          &:hover{background:#625fc740;}
           label{
             margin-left: 10px;
             width: 100%;
             color: #828FA3;
             font-weight: 600;
+            cursor: pointer;
           }
           input[type='checkbox']{
             transform: scale(1.2);
@@ -235,6 +240,7 @@ const Wrapper = styled.div`
             height: fit-content;
             padding: 10px;
             margin-top: 5px;
+            cursor: pointer;
             &.active{
               border: 1px solid #635fc7;
             }
@@ -250,6 +256,7 @@ const Wrapper = styled.div`
             width: 100%;
             background-color: ${({theme})=>theme.bg};
             top: 115%;
+            cursor: pointer;
             &.active{
               display: block;
             }

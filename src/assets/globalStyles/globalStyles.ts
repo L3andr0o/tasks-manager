@@ -10,7 +10,7 @@ export const GlobalStyles = createGlobalStyle`
         font-family: 'Plus Jakarta Sans';
         list-style: none;
         
-        ::-webkit-scrollbar {
+        @media(min-width: 768px){::-webkit-scrollbar {
         height: 10px;
         width: 10px;
         }
@@ -24,8 +24,7 @@ export const GlobalStyles = createGlobalStyle`
         &:hover{
             background: #635FC7AA;
         }
-        }
-
+        }}
     }
     body{
         height: 100%;
