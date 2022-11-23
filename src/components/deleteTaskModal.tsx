@@ -1,18 +1,26 @@
+import { doc, updateDoc } from "firebase/firestore";
 import styled from "styled-components"
+import { useAuth } from "../context/authContext";
 import { useData } from "../context/dataContext";
 import { useModals } from "../context/modalsContext"
 import { useTheme } from "../context/themeContext";
+import db from "../firebase";
 
 export default function DeleteTaskModal(){
 
     const {setDeleteTaskModal,selectedTask} = useModals();
-    const {tasks,setTasks} = useData();
+    const {tasks,setTasks,boards,columns,id,getData} = useData();
+    const {user} = useAuth();
     
-    const deleteTask = (e:any) =>{
+    const deleteTask = async (e:any) =>{
         e.preventDefault()
         const tasksAct = tasks.filter((task:any)=>task.id !== selectedTask.id);
         setTasks(tasksAct);
         setDeleteTaskModal(false)
+        const tasksDoc = doc(db,user.uid,id);
+        const update = {boards : boards,columns : columns, tasks :  tasksAct}
+        await updateDoc(tasksDoc, update);
+        getData()
     }
 
     const {theme} = useTheme();

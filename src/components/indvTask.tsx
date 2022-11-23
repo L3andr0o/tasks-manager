@@ -4,12 +4,15 @@ import { useData } from "../context/dataContext";
 import { useModals } from "../context/modalsContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTheme } from "../context/themeContext";
+import { doc, updateDoc } from "firebase/firestore";
+import db from "../firebase";
+import { useAuth } from "../context/authContext";
 
 
 export default function IndvTask(){
 
 
-  const {columns} = useData();
+  const {columns,id,tasks,boards,getData} = useData();
   const {setTaskState, selectedTask,setDeleteTaskModal,setEditTaskModal} = useModals()
   const [selectedColumn, setSelectedColumn] = useState<any>();
   const [selectState, setSelectState] = useState<string | null>(null);
@@ -17,11 +20,16 @@ export default function IndvTask(){
   const [menuState, setMenuState] = useState<boolean>(false);
   const navigate = useNavigate();
   const board = useParams()
+  const {user} = useAuth();
 
-  const closeModal = () =>{
+  const closeModal = async () =>{
     setTaskState(false);
-    navigate(`/${board.board}`);
-    selectedTask.column = selectedColumn.id
+    // navigate(`/${board.board}`);
+    selectedTask.column = selectedColumn.id;
+    const taskDoc = doc(db,user.uid,id);
+    const update = {boards : boards,columns : columns, tasks :  tasks}
+    await updateDoc(taskDoc, update);
+    getData()
   }
 
   const selectHandler =  ()=> (selectState === 'active') ? setSelectState('hidden') : setSelectState('active');

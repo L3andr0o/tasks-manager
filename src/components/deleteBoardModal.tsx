@@ -1,16 +1,19 @@
+import { updateDoc, doc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components"
+import { useAuth } from "../context/authContext";
 import { useData } from "../context/dataContext";
 import { useModals } from "../context/modalsContext"
 import { useTheme } from "../context/themeContext";
+import db from "../firebase";
 
 export default function DeleteBoardModal(){
 
     const {setDeleteBoardModal} = useModals();
-    const {selectedBoard,setBoards,boards,columns,setColumns,tasks,setTasks,setSelectedBoard} = useData();
-    const navigate = useNavigate();
+    const {user} = useAuth();
+    const {selectedBoard,setBoards,boards,columns,setColumns,tasks,setTasks,setSelectedBoard,getData,id} = useData();
 
-    const deleteBoard = (e:any)=>{
+    const deleteBoard = async (e:any)=>{
         e.preventDefault();
         if(boards.length > 1){
         const boardAct = boards.filter((board:any)=>board.id !== selectedBoard.id);
@@ -19,7 +22,10 @@ export default function DeleteBoardModal(){
         setColumns(columnsAct);
         const tasksAct = tasks.filter((task:any)=>task.board !== selectedBoard.id);
         setTasks(tasksAct);
-        navigate(`/${boardAct[0].id}`);
+        const allDoc = doc(db,user.uid,id);
+        const update = {boards : boardAct,columns : columnsAct, tasks :  tasksAct}
+        await updateDoc(allDoc, update);
+        getData()
         setSelectedBoard(boardAct[0]);
         setDeleteBoardModal(false)
         return

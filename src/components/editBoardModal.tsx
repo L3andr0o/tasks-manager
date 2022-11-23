@@ -5,11 +5,15 @@ import { useData } from "../context/dataContext";
 import {useState, useEffect} from 'react';
 import { useParams } from "react-router-dom";
 import { useTheme } from "../context/themeContext";
+import { doc, updateDoc } from "firebase/firestore";
+import db from "../firebase";
+import { useAuth } from "../context/authContext";
 
 export default function EditBoardModal(props : any){
 
     const {setEditBoardModal} = useModals();
-    const {columns, setColumns,tasks,setTasks,selectedBoard} = useData();
+    const {boards,columns,setColumns,tasks,setTasks,selectedBoard,getData,id} = useData();
+    const {user} = useAuth()
     const [modalColumns,setModalColumns] = useState<any>([]);
     const [autoFocus, setAutoFocus] = useState<boolean>(false);
     const [boardName,setBoardName] = useState<any>();
@@ -42,15 +46,19 @@ export default function EditBoardModal(props : any){
     const actBoardName = (e:any)=>{
         setBoardName(e.target.value)
     }
-    const saveChanges = (e:any) =>{
+    const saveChanges = async (e:any) =>{
         e.preventDefault();
         const validation = modalColumns.map((c:any)=>c.name.length > 0);
         const revalidation = validation.find((f:any)=>f === false);
        if(boardName.length > 0 && revalidation === undefined){ 
         setEditBoardModal(false)
         selectedBoard.name = boardName
-        const testx = columns.filter((column:any)=>column.boardId !== board);
-        setColumns([...modalColumns,...testx]);
+        const otherColumns = columns.filter((column:any)=>column.boardId !== board);
+        setColumns([...modalColumns,...otherColumns]);
+        const columnsDoc = doc(db,user.uid,id);
+        const update = {boards : boards,columns : [...modalColumns,...otherColumns], tasks :  tasks}
+        await updateDoc(columnsDoc, update);
+        getData(selectedBoard)
         setTasks(falseTasks)
         setAutoFocus(false);
         return

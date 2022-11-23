@@ -5,11 +5,15 @@ import { uuidv4 } from '@firebase/util';
 import { useData } from '../context/dataContext';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../context/themeContext';
+import { updateDoc, doc } from 'firebase/firestore';
+import { useAuth } from '../context/authContext';
+import db from '../firebase';
 
 export default function AddNewBoardModal(){
 
     const {setAddNewBoardModal} = useModals();
-    const {setBoards,boards, setColumns, columns, setSelectedBoard} = useData();
+    const {setBoards,boards, setColumns, columns,tasks,setSelectedBoard,getData,id} = useData();
+    const {user} = useAuth();
     const [boardName, setBoardName] = useState<string|null>(null);
     const [boardId, setBoardId] = useState<any>();
     const boardInfo = {
@@ -39,13 +43,17 @@ export default function AddNewBoardModal(){
         });
         setModalColumns(columnsAct)
     }
-    const saveChanges = (e:any) =>{
+    const saveChanges = async (e:any) =>{
         e.preventDefault();
         setBoards([...boards,boardInfo]);
         setColumns([...modalColumns,...columns]);
+        const boardDoc = doc(db,user.uid,id);
+        const update = {boards : [...boards,boardInfo],columns : [...modalColumns,...columns], tasks :  tasks}
+        await updateDoc(boardDoc, update);
+        getData(boardInfo)
         setAddNewBoardModal(false);
         setSelectedBoard(boardInfo)
-        navigate(`/${boardId}`)
+        // navigate(`/${boardId}`)
     }
     const handleNameChange = (e:any) =>{
         setBoardName(e.target.value)
@@ -69,7 +77,7 @@ export default function AddNewBoardModal(){
                 {modalColumns.map((column:any)=>(
                         <div key={column.id}>
                             <input type="text" defaultValue={column.name} autoFocus={autoFocus} onChange={(e)=>actColumnName(e,column.id)} />
-                            <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg" 
+                            <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg"
                             onClick={()=>deleteColumn(column.id)}><g fill="#828FA3" fillRule="evenodd"><path d="m12.728 0 2.122 2.122L2.122 14.85 0 12.728z"/><path d="M0 2.122 2.122 0 14.85 12.728l-2.122 2.122z"/></g></svg>
                         </div>
                         ))}

@@ -11,7 +11,6 @@ export default function EditTaskModal(){
     const {selectedTask,setEditTaskModal} = useModals();
     const {columns} = useData()
     const board = useParams()
-
     const [newTask, setNewTask] = useState({title:selectedTask.title,description:selectedTask.description})
     const handleChange = ({target : {name, value}}:any) =>setNewTask({...newTask, [name]: value});
     const [modalSubtasks,setModalSubtasks] = useState<any>(null);

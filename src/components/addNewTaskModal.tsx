@@ -1,24 +1,31 @@
 import { uuidv4 } from "@firebase/util";
+import { updateDoc, doc } from "firebase/firestore";
 import { useState } from "react"
 import { useParams } from "react-router-dom";
 import styled from "styled-components"
+import { useAuth } from "../context/authContext";
 import { useData } from "../context/dataContext";
 import { useModals } from "../context/modalsContext";
 import { useTheme } from "../context/themeContext";
+import db from "../firebase";
 
 export default function AddNewTaskModal(){
 
     const {setAddNewTaskModal} = useModals();
-    const {columns,tasks,setTasks,selectedBoard} = useData();
+    const {boards,columns,tasks,setTasks,selectedBoard,id,getData} = useData();
+    const {user} = useAuth();
     const board = useParams().board;
     const [selectedColumn, setSelectedColumn] = useState<any>(columns[0]);
     const [subtasks, setSubtasks] = useState<any>([
         {content:'',
         id:uuidv4(),
-        placeholder:'e.g. Take coffee break'},
+        placeholder:'e.g. Take coffee break',
+        completed: false
+        },
         {content:'',
         id:uuidv4(),
-        placeholder:'e.g. Drink coffee & smile'
+        placeholder:'e.g. Drink coffee & smile',
+        completed: false
         }]);
     const [newTask, setNewTask] = useState({title:'',description:''})
     const handleChange = ({target : {name, value}}:any) =>setNewTask({...newTask, [name]: value});
@@ -51,7 +58,7 @@ export default function AddNewTaskModal(){
         setSelectedColumn(column)
     }
 
-    const createTask = (e:any)=>{
+    const createTask = async (e:any)=>{
         e.preventDefault();
         const validation = subtasks.map((st:any)=>st.content.length > 0);
         const revalidation = validation.find((f:any)=>f === false);
@@ -70,6 +77,10 @@ export default function AddNewTaskModal(){
             board:selectedBoard.id
         }
         setTasks([...tasks,task]);
+        const taskDoc = doc(db,user.uid,id);
+        const update = {boards : boards,columns : columns, tasks :[...tasks,task]}
+        await updateDoc(taskDoc, update);
+        getData()
         setAddNewTaskModal(false)
         return
        }alert(`Can't be empty fields`)

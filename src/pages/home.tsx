@@ -19,7 +19,7 @@ export default function Home(){
 
   const {editBoardModal, addNewTaskModal, setEditBoardModal,taskState, setTaskState, addNewBoardModal,setSelectedTask,deleteTaskModal,editTaskModal,deleteBoardModal} = useModals()
   const {user, logout} = useAuth();
-  const {columns,tasks,selectedBoard} = useData();
+  const {columns,tasks,selectedBoard,getData} = useData();
   const [boardTasks, setBoardTasks] = useState<any>(null);
   const [boardColumns, setBoardColumns] = useState<any>([]);
   const navigate = useNavigate();
@@ -32,6 +32,7 @@ export default function Home(){
   };
   console.log(user)
   
+  
   const handleLogout = async () =>{
     try {
       await logout();
@@ -40,9 +41,9 @@ export default function Home(){
     }
   }
   useEffect(()=>{
-    navigate(`/${selectedBoard.id}`)
+    (selectedBoard) && navigate(`/${selectedBoard.id}`)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+  },[getData])
   useEffect(()=>{
     setBoardColumns(columns.filter((column:any)=>column.boardId === boardId.board));
     setBoardTasks(tasks.filter((task:any)=>task.board === boardId.board));
@@ -174,7 +175,7 @@ const Wrapper = styled.div`
       .addColumn{
         width: 17em;
         display: flex;
-        height: 98vh;
+        height: 88vh;
         justify-content: center;
         align-items: center;
         background: linear-gradient(${({theme})=>theme.bg},#0001);
