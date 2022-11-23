@@ -1,5 +1,4 @@
 import { updateDoc, doc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components"
 import { useAuth } from "../context/authContext";
 import { useData } from "../context/dataContext";

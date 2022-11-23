@@ -5,11 +5,15 @@ import { uuidv4 } from "@firebase/util";
 import { useData } from "../context/dataContext";
 import { useParams } from "react-router-dom";
 import { useTheme } from "../context/themeContext";
+import { doc, updateDoc } from "firebase/firestore";
+import db from "../firebase";
+import { useAuth } from "../context/authContext";
 
 export default function EditTaskModal(){
 
     const {selectedTask,setEditTaskModal} = useModals();
-    const {columns} = useData()
+    const {columns,boards,tasks,id,getData} = useData();
+    const {user} = useAuth();
     const board = useParams()
     const [newTask, setNewTask] = useState({title:selectedTask.title,description:selectedTask.description})
     const handleChange = ({target : {name, value}}:any) =>setNewTask({...newTask, [name]: value});
@@ -39,12 +43,16 @@ export default function EditTaskModal(){
   const [selectState, setSelectState] = useState<string | null>(null);
   const selectHandler =  ()=> (selectState === 'active') ? setSelectState('hidden') : setSelectState('active');
   
-  const createTask = (e:any)=>{
+  const createTask = async (e:any)=>{
     e.preventDefault()
     selectedTask.title = newTask.title;
     selectedTask.description = newTask.description;
     selectedTask.subtasks = modalSubtasks;
     selectedTask.column = selectedColumn.id;
+    const taskDoc = doc(db,user.uid,id);
+    const update = {boards : boards,columns : columns, tasks : tasks}
+    await updateDoc(taskDoc, update);
+    getData()
     setEditTaskModal(false)
 }
 

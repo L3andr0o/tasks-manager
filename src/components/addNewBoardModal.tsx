@@ -3,7 +3,6 @@ import { useModals } from '../context/modalsContext'
 import {useState, useEffect} from 'react';
 import { uuidv4 } from '@firebase/util';
 import { useData } from '../context/dataContext';
-import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../context/themeContext';
 import { updateDoc, doc } from 'firebase/firestore';
 import { useAuth } from '../context/authContext';
@@ -20,7 +19,6 @@ export default function AddNewBoardModal(){
         name:boardName,
         id:boardId
     }
-    const navigate = useNavigate();
     const [autoFocus,setAutoFocus] = useState<boolean>(false);
     const [modalColumns,setModalColumns] = useState<any>([]);
     const addNewColumn = (e:any,column:any)=>{

@@ -2,7 +2,7 @@ import styled from "styled-components"
 import {useState,useEffect} from 'react';
 import { useData } from "../context/dataContext";
 import { useModals } from "../context/modalsContext";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useTheme } from "../context/themeContext";
 import { doc, updateDoc } from "firebase/firestore";
 import db from "../firebase";
@@ -18,13 +18,11 @@ export default function IndvTask(){
   const [selectState, setSelectState] = useState<string | null>(null);
   const [boardColumns, setBoardColumns] = useState<any>([]);
   const [menuState, setMenuState] = useState<boolean>(false);
-  const navigate = useNavigate();
   const board = useParams()
   const {user} = useAuth();
 
   const closeModal = async () =>{
     setTaskState(false);
-    // navigate(`/${board.board}`);
     selectedTask.column = selectedColumn.id;
     const taskDoc = doc(db,user.uid,id);
     const update = {boards : boards,columns : columns, tasks :  tasks}
