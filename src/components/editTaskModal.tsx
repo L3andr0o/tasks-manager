@@ -18,6 +18,7 @@ export default function EditTaskModal(){
     const [newTask, setNewTask] = useState({title:selectedTask.title,description:selectedTask.description})
     const handleChange = ({target : {name, value}}:any) =>setNewTask({...newTask, [name]: value});
     const [modalSubtasks,setModalSubtasks] = useState<any>(null);
+    const [disable, setDisable] = useState<boolean>(false);
 
     const addNewSubtask = (e:any,subtask:any)=>{
         e.preventDefault();
@@ -45,15 +46,17 @@ export default function EditTaskModal(){
   
   const createTask = async (e:any)=>{
     e.preventDefault()
+    setDisable(true)
     selectedTask.title = newTask.title;
     selectedTask.description = newTask.description;
     selectedTask.subtasks = modalSubtasks;
     selectedTask.column = selectedColumn.id;
     const taskDoc = doc(db,user.uid,id);
-    const update = {boards : boards,columns : columns, tasks : tasks}
+    const update = {boards : boards,columns : columns, tasks : tasks};
     await updateDoc(taskDoc, update);
     getData()
     setEditTaskModal(false)
+    setDisable(false)
 }
 
     useEffect(()=>{
@@ -119,10 +122,10 @@ export default function EditTaskModal(){
                         }
                         </ul>
                     </div>
-                    <button className="tasks-btn" onClick={e=>createTask(e)}>Create Task</button>
+                    <button className="tasks-btn" onClick={e=>createTask(e)}>{!disable ? 'Create Task' : 'Loading...'}</button>
                 </form>
             </div>
-            <div className="bg" onClick={()=> setEditTaskModal(false)}></div>
+            <div className="bg" onClick={()=> !disable && setEditTaskModal(false)}></div>
         </Wrapper>
     )
 }

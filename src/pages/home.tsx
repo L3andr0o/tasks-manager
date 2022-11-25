@@ -14,6 +14,7 @@ import DeleteTaskModal from '../components/deleteTaskModal';
 import EditTaskModal from '../components/editTaskModal';
 import DeleteBoardModal from '../components/deleteBoardModal';
 import { useTheme } from '../context/themeContext';
+import Loader from '../components/loader';
 
 export default function Home(){
 
@@ -53,7 +54,10 @@ export default function Home(){
     <Wrapper theme={theme}>
         <GlobalStyles />
         <NavBar />
-        {
+        {!selectedBoard
+        ?
+        <Loader />
+        :
           boardColumns.length === 0
             ?
           <div className="content">

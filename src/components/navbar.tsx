@@ -45,7 +45,7 @@ export default function NavBar(){
                     <h1>kanban</h1>
                 </div>
                 <div className='burger-menu-toggle' onClick={burgerMenuHandler}>
-                    <h2 className={burgerMenuState!}>{selectedBoard ? selectedBoard.name : 'loading'}</h2>
+                    <h2 className={burgerMenuState!}>{selectedBoard ? selectedBoard.name : 'Loading...'}</h2>
                     <svg width='10' height='7' xmlns='http://www.w3.org/2000/svg' className={burgerMenuState!}>
                         <path stroke='#635FC7' strokeWidth='2' fill='none' d='m1 1 4 4 4-4'/>
                     </svg>
