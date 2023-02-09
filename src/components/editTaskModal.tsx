@@ -80,6 +80,19 @@ export default function EditTaskModal(){
 
     const {theme} = useTheme();
 
+    
+    function filterNumbersFromArray(arr:Array<string | number>) {
+        // Your code goes here
+        const newArr = arr.filter((e:any)=> !isNaN(e));
+        console.log(newArr)
+        return newArr
+    }
+    filterNumbersFromArray(['hola',1])
+    filterNumbersFromArray([2,1])
+    filterNumbersFromArray(['hola','hola'])
+
+    
+
     return(
         <Wrapper theme={theme}>
             <div className="modal">
